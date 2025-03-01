@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notes</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', path='images/icon.png') }}"/>
+</head>
+<body class="grey lighten-4">
+<div class="container mt-5">
+    <h3 class="center-align">Notes: {{ notes_count }}</h3>
+    <div class="row">
+        <div class="col s12 m8 offset-m2">
+            <div class="card">
+                <div class="card-content">
+            <span class="card-title">
+                Enter the text of the note, a secret phrase and select a picture to upload (optional)
+            </span>
+                    <form id="noteForm" method="post" enctype="multipart/form-data">
+                        <div class="input-field">
+                            <input type="text" id="secretPhrase" name="secret">
+                            <label for="secretPhrase">Enter secret phrase</label>
+                        </div>
+                        <div class="input-field">
+                            <textarea class="materialize-textarea" id="noteText" name="text" rows="4"></textarea>
+                            <label for="noteText">Enter the text of the note</label>
+                        </div>
+                        <div class="file-field input-field">
+                            <div class="waves-effect waves-light btn-small">
+                                <span>File</span>
+                                <input type="file" id="noteImage" name="image">
+                            </div>
+                            <div class="file-path-wrapper">
+                                <input class="file-path validate" type="text"
+                                       placeholder="Select a picture (optional)">
+                            </div>
+                        </div>
+                        <span class="card-title">lifetime note</span>
+                        <div class="row">
+                            <div class="input-field col s4">
+                                <input type="number" id="lifetimeHours" name="lifetime_hours" min="0" value="0">
+                                <label for="lifetimeHours">Hours</label>
+                            </div>
+                            <div class="input-field col s4">
+                                <input type="number" id="lifetimeMinutes" name="lifetime_minutes" min="0" max="59"
+                                       value="0">
+                                <label for="lifetimeMinutes">Minutes</label>
+                            </div>
+                            <div class="input-field col s4">
+                                <input type="number" id="lifetimeSeconds" name="lifetime_seconds" min="0" max="59"
+                                       value="0">
+                                <label for="lifetimeSeconds">Seconds</label>
+                            </div>
+                        </div>
+                        <p>
+                            <label>
+                                <input type="checkbox" id="ephemeral" name="is_ephemeral"/>
+                                <span>Ephemeral letter</span>
+                            </label>
+                        </p>
+                        <div class="card-action">
+                            <button class="btn waves-effect waves-light" type="submit">Send</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col s12 m8 offset-m2">
+            <div class="card">
+                <div class="card-content">
+                    <span class="card-title">Enter the note ID and secret phrase</span>
+                    <form id="getNoteForm">
+                        <div class="input-field">
+                            <input type="text" id="noteId" name="note_id">
+                            <label for="noteId">Enter note ID</label>
+                        </div>
+                        <div class="input-field">
+                            <input type="text" id="getSecretPhrase" name="note_secret">
+                            <label for="getSecretPhrase">Enter secret phrase</label>
+                        </div>
+                        <div class="card-action">
+                            <button class="btn waves-effect waves-light" type="submit">Receive</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        M.AutoInit();
+    });
+
+    document.getElementById('noteForm').addEventListener('submit', function (event) {
+        event.preventDefault();
+        const form = document.getElementById('noteForm');
+        const formData = new FormData(form);
+
+        const hours = parseInt(document.getElementById('lifetimeHours').value) || 0;
+        const minutes = parseInt(document.getElementById('lifetimeMinutes').value) || 0;
+        const seconds = parseInt(document.getElementById('lifetimeSeconds').value) || 0;
+        const totalSeconds = hours * 3600 + minutes * 60 + seconds;
+
+        if (document.getElementById('ephemeral').checked && totalSeconds > 0) {
+            alert("You cannot set a lifetime for an ephemeral message");
+            return;
+        }
+
+        fetch('/create_note', {
+            method: 'POST',
+            body: formData
+        })
+            .then(response => {
+                if (!response.ok) {
+                    return response.json().then(data => {
+                        throw new Error(data.detail || 'Error creating note');
+                    });
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.response === "ok") {
+                    document.location.href = "/result/" + data.note_id;
+                } else if (data.error) {
+                    alert(data.error);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert(error.message);
+            });
+
+        form.reset();
+    });
+
+    document.getElementById('getNoteForm').addEventListener('submit', function (event) {
+        event.preventDefault();
+        const noteId = document.getElementById('noteId').value;
+        const getSecretPhrase = document.getElementById('getSecretPhrase').value;
+        const formData = new FormData();
+        formData.append("note_id", noteId);
+        formData.append("note_secret", getSecretPhrase);
+
+        fetch('/get_note', {
+            method: 'POST',
+            body: formData
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log("Received response:", data); // Для отладки
+                if (data.response === "ok") {
+                    // Создаем URL для перенаправления
+                    let redirectUrl = "/note_page/" + encodeURIComponent(data.note_final_text);
+                    if (data.note_image) {
+                        redirectUrl += "?note_image=" + encodeURIComponent(data.note_image);
+                    }
+                    // Перенаправляем пользователя
+                    window.location.href = redirectUrl;
+                } else {
+                    // В случае ошибки показываем сообщение
+                    alert(data.note_final_text || "An error occurred");
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert("An error occurred while processing your request.");
+            });
+    });
+</script>
+</body>
+</html>
