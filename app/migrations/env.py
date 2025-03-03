@@ -8,11 +8,8 @@ sys.path.insert(0, dirname(dirname(dirname(abspath(__file__)))))
 
 from alembic import context
 
-from app.config import settings
-from app.baseclass import Base
-from app.notes.models import NoteORM
-from app.users.models import User
-from app.authentication.access_token import AccessToken
+from core.baseclass import Base
+from core.config import settings
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -75,9 +72,7 @@ def run_migrations_online() -> None:
     )
 
     with connectable.connect() as connection:
-        context.configure(
-            connection=connection, target_metadata=target_metadata
-        )
+        context.configure(connection=connection, target_metadata=target_metadata)
 
         with context.begin_transaction():
             context.run_migrations()

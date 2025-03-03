@@ -1,5 +1,6 @@
 from sqlalchemy.orm import DeclarativeBase, declared_attr
-from app.utils import camel_case_to_snake_case
+
+from app.utils.case_converter import camel_case_to_snake_case
 
 
 class Base(DeclarativeBase):

@@ -154,17 +154,14 @@
         })
             .then(response => response.json())
             .then(data => {
-                console.log("Received response:", data); // Для отладки
+                console.log("Received response:", data);
                 if (data.response === "ok") {
-                    // Создаем URL для перенаправления
                     let redirectUrl = "/note_page/" + encodeURIComponent(data.note_final_text);
                     if (data.note_image) {
                         redirectUrl += "?note_image=" + encodeURIComponent(data.note_image);
                     }
-                    // Перенаправляем пользователя
                     window.location.href = redirectUrl;
                 } else {
-                    // В случае ошибки показываем сообщение
                     alert(data.note_final_text || "An error occurred");
                 }
             })

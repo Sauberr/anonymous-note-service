@@ -1,38 +1,37 @@
 from datetime import datetime, timedelta, timezone
 from secrets import compare_digest
 
-from fastapi import APIRouter, Depends, File, Form, Request, UploadFile, Query
+from fastapi import APIRouter, Depends, File, Form, Query, Request, UploadFile, status
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from starlette.responses import JSONResponse
 
-from fastapi import status
-from app.notes.services import get_note_id
-from app.notes.models import NoteORM
-from app.utils import (download_image, get_async_session)
-from app.notes.services import is_lifetime_note, is_ephemeral_note
+from app.notes.models import Note
+from app.notes.services import get_note_id, is_ephemeral_note, is_lifetime_note
+from app.utils.downloading_pictures import download_image
+from app.utils.async_session import get_async_session
 
-
-note_router = APIRouter(
+router = APIRouter(
     tags=["Note"],
 )
 
 templates = Jinja2Templates(directory="app/templates")
 
 
-@note_router.get("/", response_class=HTMLResponse)
-async def get_home_page(request: Request, db: AsyncSession = Depends(get_async_session)):
-    result = await db.execute(select(NoteORM))
+@router.get("/", response_class=HTMLResponse)
+async def get_home_page(
+    request: Request, db: AsyncSession = Depends(get_async_session)
+):
+    result = await db.execute(select(Note))
     notes = result.scalars().all()
-    return templates.TemplateResponse("index.html", {
-        "request": request,
-        "notes_count": len(notes)
-    })
+    return templates.TemplateResponse(
+        "index.html", {"request": request, "notes_count": len(notes)}
+    )
 
 
-@note_router.post("/create_note")
+@router.post("/create_note")
 async def create_note(
     db: AsyncSession = Depends(get_async_session),
     secret: str = Form(...),
@@ -41,12 +40,17 @@ async def create_note(
     lifetime_minutes: int = Form(0),
     lifetime_seconds: int = Form(0),
     is_ephemeral: bool = Form(False),
-    image: UploadFile = File(None)
+    image: UploadFile = File(None),
 ) -> JSONResponse:
-    if is_ephemeral and (lifetime_hours > 0 or lifetime_minutes > 0 or lifetime_seconds > 0):
+    if is_ephemeral and (
+        lifetime_hours > 0 or lifetime_minutes > 0 or lifetime_seconds > 0
+    ):
         return JSONResponse(
             status_code=status.HTTP_400_BAD_REQUEST,
-            content={"response": "error", "error": "Ephemeral notes cannot have a lifetime"}
+            content={
+                "response": "error",
+                "error": "Ephemeral notes cannot have a lifetime",
+            },
         )
 
     lifetime = None
@@ -59,45 +63,47 @@ async def create_note(
 
     saved_filename = await download_image(image) if image else None
 
-    note = NoteORM(
+    note = Note(
         text=text,
         secret=secret,
         note_hash=note_id,
         is_ephemeral=is_ephemeral,
         lifetime=lifetime,
-        image=saved_filename
+        image=saved_filename,
     )
     db.add(note)
     await db.commit()
 
     return JSONResponse(
         status_code=status.HTTP_201_CREATED,
-        content={"response": "ok", "note_id": note_id}
+        content={"response": "ok", "note_id": note_id},
     )
 
 
-@note_router.get("/result/{note_id}", response_class=HTMLResponse)
+@router.get("/result/{note_id}", response_class=HTMLResponse)
 async def get_result_id(request: Request, note_id: str):
-    return templates.TemplateResponse("hash_storage.html", {
-        "request": request,
-        "note_id": note_id
-    })
+    return templates.TemplateResponse(
+        "hash_storage.html", {"request": request, "note_id": note_id}
+    )
 
 
-@note_router.post("/get_note")
+@router.post("/get_note")
 async def get_note(
-        db: AsyncSession = Depends(get_async_session),
-        note_id: str = Form(...),
-        note_secret: str = Form(...)
+    db: AsyncSession = Depends(get_async_session),
+    note_id: str = Form(...),
+    note_secret: str = Form(...),
 ) -> JSONResponse:
-    result = await db.execute(select(NoteORM).where(NoteORM.note_hash == note_id))
+    result = await db.execute(select(Note).where(Note.note_hash == note_id))
     note = result.scalar_one_or_none()
 
     if note and compare_digest(str(note.secret), str(note_secret)):
         if await is_lifetime_note(note, db):
             return JSONResponse(
                 status_code=status.HTTP_404_NOT_FOUND,
-                content={"response": "error", "note_final_text": "Such a note does not exist"}
+                content={
+                    "response": "error",
+                    "note_final_text": "Such a note does not exist",
+                },
             )
 
         note_text = note.text
@@ -109,34 +115,45 @@ async def get_note(
             content={
                 "response": "ok",
                 "note_final_text": note_text,
-                "note_image": note_image
+                "note_image": note_image,
             }
         )
     return JSONResponse(
         status_code=status.HTTP_404_NOT_FOUND,
-        content={"response": "error", "note_final_text": "Such a note does not exist"}
+        content={"response": "error", "note_final_text": "Such a note does not exist"},
     )
 
 
-@note_router.get("/note_page/{note_text}", response_class=HTMLResponse)
+@router.get("/note_page/{note_text}", response_class=HTMLResponse)
 async def get_result_note(request: Request, note_text: str, note_image: str = ""):
-    return templates.TemplateResponse("note_page.html", {
-        "request": request,
-        "note_text": note_text,
-        "note_image": note_image
-    })
+    return templates.TemplateResponse(
+        "note_page.html",
+        {"request": request, "note_text": note_text, "note_image": note_image},
+    )
 
 
-@note_router.get("/notes", response_class=JSONResponse)
+@router.get("/notes", response_class=JSONResponse)
 async def get_notes(
     db: AsyncSession = Depends(get_async_session),
     page: int = Query(1, ge=1),
-    per_page: int = Query(3, ge=1, le=100)
+    per_page: int = Query(3, ge=1, le=100),
 ) -> JSONResponse:
     offset = (page - 1) * per_page
-    result = await db.execute(select(NoteORM).offset(offset).limit(per_page))
+    result = await db.execute(select(Note).offset(offset).limit(per_page))
     notes = result.scalars().all()
-    notes_data = [{"id": note.id,
-                   "text": note.text,
-                   "image": note.image if hasattr(note, 'image') else None} for note in notes]
-    return JSONResponse(content={"notes": notes_data, "page": page, "per_page": per_page, "total": len(notes)})
+    notes_data = [
+        {
+            "id": note.id,
+            "text": note.text,
+            "image": note.image if hasattr(note, "image") else None,
+        }
+        for note in notes
+    ]
+    return JSONResponse(
+        content={
+            "notes": notes_data,
+            "page": page,
+            "per_page": per_page,
+            "total": len(notes),
+        }
+    )

@@ -1,13 +1,13 @@
 from datetime import datetime
 
 from sqlalchemy import DateTime
-from sqlalchemy.orm import mapped_column, Mapped
+from sqlalchemy.orm import Mapped, mapped_column
 
-from app.baseclass import Base
+from app.core.baseclass import Base
 from app.mixin.mixin import IdIntMixin
 
 
-class NoteORM(Base, IdIntMixin):
+class Note(Base, IdIntMixin):
     __tablename__ = "notes"
 
     text: Mapped[str] = mapped_column(nullable=False)
