@@ -1,6 +1,7 @@
 import asyncio
 import contextlib
 
+from core.config import settings
 from pydantic import EmailStr
 
 from app.authentication.user_manager import UserManager
@@ -9,7 +10,6 @@ from app.dependencies.users import get_users_db
 from app.users.models import User
 from app.users.schemas import UserCreate
 from app.utils.async_session import get_async_session
-from core.config import settings
 
 get_async_session_context = contextlib.asynccontextmanager(get_async_session)
 get_users_db_context = contextlib.asynccontextmanager(get_users_db)

@@ -10,6 +10,6 @@ router = APIRouter(
 
 @router.post("/notify-user-created")
 def notify_user_created(info: UserRegisteredNotification):
-    '''
+    """
     This webhook will be called when a new user is created.
-    '''
+    """

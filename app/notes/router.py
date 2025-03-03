@@ -10,8 +10,8 @@ from starlette.responses import JSONResponse
 
 from app.notes.models import Note
 from app.notes.services import get_note_id, is_ephemeral_note, is_lifetime_note
-from app.utils.downloading_pictures import download_image
 from app.utils.async_session import get_async_session
+from app.utils.downloading_pictures import download_image
 
 router = APIRouter(
     tags=["Note"],

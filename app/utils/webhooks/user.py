@@ -1,11 +1,10 @@
 import logging
 import time
 
-from app.users.models import User
 import aiohttp
 
-from app.users.schemas import UserRead
-from app.users.schemas import UserRegisteredNotification
+from app.users.models import User
+from app.users.schemas import UserRead, UserRegisteredNotification
 
 log = logging.getLogger(__name__)
 

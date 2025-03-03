@@ -1,14 +1,14 @@
 import logging
-from typing import TYPE_CHECKING, Optional, Union
-from app.utils.webhooks.user import send_new_user_notification
 import re
+from typing import TYPE_CHECKING, Optional, Union
 
 from fastapi_users import BaseUserManager, IntegerIDMixin, InvalidPasswordException
-from app.users.schemas import UserCreate
 
 from app.core.config import settings
 from app.core.types.user_id import UserIdType
 from app.users.models import User
+from app.users.schemas import UserCreate
+from app.utils.webhooks.user import send_new_user_notification
 
 if TYPE_CHECKING:
     from fastapi import Request
@@ -22,9 +22,9 @@ class UserManager(IntegerIDMixin, BaseUserManager[User, UserIdType]):
     verification_token_secret = settings.access_token.verification_token_secret
 
     async def validate_password(
-            self,
-            password: str,
-            user: Union[UserCreate, User],
+        self,
+        password: str,
+        user: Union[UserCreate, User],
     ) -> None:
 
         if len(password) < 8:
@@ -32,32 +32,26 @@ class UserManager(IntegerIDMixin, BaseUserManager[User, UserIdType]):
                 reason="Password should be at least 8 characters"
             )
 
-        if not re.search(r'[!@#$%^&*()_\-+={}[\]|\\:;\'<>?,./]', password):
+        if not re.search(r"[!@#$%^&*()_\-+={}[\]|\\:;\'<>?,./]", password):
             raise InvalidPasswordException(
                 reason="Password should contain at least one special character"
             )
 
-        if not re.search(r'[A-Z]', password):
+        if not re.search(r"[A-Z]", password):
             raise InvalidPasswordException(
                 reason="Password should contain at least one capital letter"
             )
 
-        if not re.search(r'[0-9]', password):
+        if not re.search(r"[0-9]", password):
             raise InvalidPasswordException(
                 reason="Password should contain at least one digit"
             )
 
         if user.email in password:
-            raise InvalidPasswordException(
-                reason="Password should not contain e-mail"
-            )
+            raise InvalidPasswordException(reason="Password should not contain e-mail")
 
-    async def on_after_register(
-            self, user: User, request: Optional["Request"] = None
-    ):
-        log.warning(
-            "User %r has registered.", user.id
-        )
+    async def on_after_register(self, user: User, request: Optional["Request"] = None):
+        log.warning("User %r has registered.", user.id)
 
         await send_new_user_notification(user)
 

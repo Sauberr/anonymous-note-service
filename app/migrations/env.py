@@ -7,7 +7,6 @@ from sqlalchemy import engine_from_config, pool
 sys.path.insert(0, dirname(dirname(dirname(abspath(__file__)))))
 
 from alembic import context
-
 from core.baseclass import Base
 from core.config import settings
 

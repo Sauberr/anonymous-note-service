@@ -1,11 +1,10 @@
 from typing import TYPE_CHECKING
 
-
-from fastapi_users_db_sqlalchemy import SQLAlchemyUserDatabase, SQLAlchemyBaseUserTable
+from fastapi_users_db_sqlalchemy import SQLAlchemyBaseUserTable, SQLAlchemyUserDatabase
 
 from app.core.baseclass import Base
-from app.mixin.mixin import IdIntMixin
 from app.core.types.user_id import UserIdType
+from app.mixin.mixin import IdIntMixin
 
 if TYPE_CHECKING:
     from sqlalchemy.ext.asyncio import AsyncSession
