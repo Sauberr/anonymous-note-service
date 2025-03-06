@@ -1,10 +1,10 @@
 import asyncio
 import contextlib
 
-from core.config import settings
 from pydantic import EmailStr
 
 from app.authentication.user_manager import UserManager
+from app.core.config import settings
 from app.dependencies.user_manager import get_user_manager
 from app.dependencies.users import get_users_db
 from app.users.models import User
