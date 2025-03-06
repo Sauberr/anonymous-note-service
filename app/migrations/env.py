@@ -7,8 +7,13 @@ from sqlalchemy import engine_from_config, pool
 sys.path.insert(0, dirname(dirname(dirname(abspath(__file__)))))
 
 from alembic import context
-from core.baseclass import Base
-from core.config import settings
+
+from app.authentication.access_token import AccessToken
+from app.authentication.oauth2.model import OAuthAccount
+from app.core.baseclass import Base
+from app.core.config import settings
+from app.notes.models import Note
+from app.users.models import User
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
