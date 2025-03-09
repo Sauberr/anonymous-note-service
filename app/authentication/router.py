@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 from fastapi.templating import Jinja2Templates
 
-from app.authentication.oauth2.oauth2 import google_oauth_client
+from app.authentication.oauth2 import google_oauth_client
 from app.core.config import settings
 from app.dependencies.backend import authentication_backend
 from app.dependencies.fastapi_users import fastapi_users

@@ -8,8 +8,7 @@ sys.path.insert(0, dirname(dirname(dirname(abspath(__file__)))))
 
 from alembic import context
 
-from app.authentication.access_token import AccessToken
-from app.authentication.oauth2.model import OAuthAccount
+from app.authentication.model import OAuthAccount, AccessToken
 from app.core.baseclass import Base
 from app.core.config import settings
 from app.notes.models import Note

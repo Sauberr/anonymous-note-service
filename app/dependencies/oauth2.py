@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING, Annotated
 
 from fastapi import Depends
 
-from app.authentication.oauth2.model import OAuthAccount
+from app.authentication.model import OAuthAccount
 from app.users.models import User
 from app.utils.async_session import get_async_session
 

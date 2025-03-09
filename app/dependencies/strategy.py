@@ -9,7 +9,7 @@ from app.dependencies.access_tokens import get_access_tokens_db
 if TYPE_CHECKING:
     from fastapi_users.authentication.strategy.db import AccessTokenDatabase
 
-    from app.authentication.access_token import AccessToken
+    from app.authentication.model import AccessToken
 
 
 def get_database_strategy(

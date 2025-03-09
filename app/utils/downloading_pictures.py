@@ -1,12 +1,13 @@
 import os
 import shutil
+from pathlib import Path
 
 import uuid_utils as uuid
 from fastapi import UploadFile
 
 
 async def download_image(
-    image: UploadFile, upload_dir: str = "app/static/images"
+    image: UploadFile, upload_dir: str = Path("app/static/images").absolute()
 ) -> str:
     if image is None:
         raise ValueError("No image file provided")
