@@ -16,3 +16,6 @@ class Note(Base, IdIntMixin):
     is_ephemeral: Mapped[bool] = mapped_column(default=False, nullable=False)
     lifetime: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=True)
     image: Mapped[str] = mapped_column(nullable=True)
+
+    def __str__(self):
+        return f"Note: {self.id}"

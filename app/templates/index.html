@@ -106,7 +106,9 @@
         const hours = parseInt(document.getElementById('lifetimeHours').value) || 0;
         const minutes = parseInt(document.getElementById('lifetimeMinutes').value) || 0;
         const seconds = parseInt(document.getElementById('lifetimeSeconds').value) || 0;
-        const totalSeconds = hours * 3600 + minutes * 60 + seconds;
+        const secondsInHour = 3600;
+        const secondsInMinute = 60;
+        const totalSeconds = hours * secondsInHour + minutes * secondsInMinute + seconds;
 
         if (document.getElementById('ephemeral').checked && totalSeconds > 0) {
             alert("You cannot set a lifetime for an ephemeral message");

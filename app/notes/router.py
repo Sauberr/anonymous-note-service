@@ -54,8 +54,10 @@ async def create_note(
         )
 
     lifetime = None
+    seconds_in_hour: int = 3600
+    seconds_in_minute: int = 60
     if not is_ephemeral:
-        total_seconds = lifetime_hours * 3600 + lifetime_minutes * 60 + lifetime_seconds
+        total_seconds = lifetime_hours * seconds_in_hour + lifetime_minutes * seconds_in_minute + lifetime_seconds
         if total_seconds > 0:
             lifetime = datetime.now(timezone.utc) + timedelta(seconds=total_seconds)
 
