@@ -1,6 +1,5 @@
 from fastapi import APIRouter
 from fastapi.templating import Jinja2Templates
-from sqlalchemy.testing import exclude
 
 from app.authentication.oauth2 import google_oauth_client
 from app.core.config import settings

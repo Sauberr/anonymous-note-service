@@ -5,9 +5,9 @@ from fastapi_users_db_sqlalchemy.access_token import SQLAlchemyBaseAccessTokenTa
 from sqlalchemy import ForeignKey, Integer
 from sqlalchemy.orm import Mapped, declared_attr, mapped_column
 
-from app.core.baseclass import Base
+from app.core.models.base import Base
 from app.core.types.user_id import UserIdType
-from app.mixin.mixin import IdIntMixin
+from app.core.models.mixin.int_id_pk import IdIntMixin
 
 if TYPE_CHECKING:
     from sqlalchemy.ext.asyncio import AsyncSession

@@ -2,8 +2,8 @@ from typing import TYPE_CHECKING, Annotated
 
 from fastapi import Depends
 
-from app.authentication.model import AccessToken
-from app.utils.async_session import get_async_session
+from app.authentication.models import AccessToken
+from app.core.models.db_helper import db_helper
 
 if TYPE_CHECKING:
     from sqlalchemy.ext.asyncio import AsyncSession
@@ -12,7 +12,7 @@ if TYPE_CHECKING:
 async def get_access_tokens_db(
     session: Annotated[
         "AsyncSession",
-        Depends(get_async_session),
+        Depends(db_helper.session_getter),
     ],
 ):
     yield AccessToken.get_db(session=session)

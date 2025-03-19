@@ -9,9 +9,9 @@ from app.dependencies.user_manager import get_user_manager
 from app.dependencies.users import get_users_db
 from app.users.models import User
 from app.users.schemas import UserCreate
-from app.utils.async_session import get_async_session
+from app.core.models.db_helper import db_helper
 
-get_async_session_context = contextlib.asynccontextmanager(get_async_session)
+get_async_session_context = contextlib.asynccontextmanager(db_helper.session_getter)
 get_users_db_context = contextlib.asynccontextmanager(get_users_db)
 get_user_manager_context = contextlib.asynccontextmanager(get_user_manager)
 

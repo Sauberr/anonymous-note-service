@@ -3,9 +3,8 @@ from datetime import datetime, timezone
 
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
-
-from app.core.db_session import async_session_maker
 from app.notes.models import Note
+from app.core.models.db_helper import DataBaseHelper
 
 
 def get_note_id(text: str, salt: str) -> str:
@@ -28,14 +27,19 @@ async def is_ephemeral_note(note: Note, db: AsyncSession):
     return False
 
 
-async def delete_expired_notes():
-    async with async_session_maker() as session:
-        async with session.begin():
+async def delete_expired_notes(db_helper: DataBaseHelper):
+    async for session in db_helper.session_getter():
+        try:
             current_time = datetime.now(timezone.utc)
             result = await session.execute(
                 select(Note).where(Note.lifetime <= current_time)
             )
             expired_notes = result.scalars().all()
+
             for note in expired_notes:
                 await session.delete(note)
+
             await session.commit()
+        except Exception as e:
+            await session.rollback()
+            raise e

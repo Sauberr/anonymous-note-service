@@ -2,7 +2,7 @@ from sqladmin import ModelView
 
 from app.users.models import User
 from app.notes.models import Note
-from app.authentication.model import AccessToken, OAuthAccount
+from app.authentication.models import AccessToken, OAuthAccount
 
 
 

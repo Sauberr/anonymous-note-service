@@ -3,10 +3,10 @@ from typing import TYPE_CHECKING
 from fastapi_users_db_sqlalchemy import SQLAlchemyBaseUserTable, SQLAlchemyUserDatabase
 from sqlalchemy.orm import Mapped, relationship
 
-from app.authentication.model import OAuthAccount
-from app.core.baseclass import Base
+from app.authentication.models import OAuthAccount
 from app.core.types.user_id import UserIdType
-from app.mixin.mixin import IdIntMixin
+from app.core.models.mixin.int_id_pk import IdIntMixin
+from app.core.models.base import Base
 
 if TYPE_CHECKING:
     from sqlalchemy.ext.asyncio import AsyncSession

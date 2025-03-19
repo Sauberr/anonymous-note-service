@@ -10,8 +10,8 @@ from starlette.responses import JSONResponse
 
 from app.notes.models import Note
 from app.notes.services import get_note_id, is_ephemeral_note, is_lifetime_note
-from app.utils.async_session import get_async_session
 from app.utils.downloading_pictures import download_image
+from app.core.models.db_helper import db_helper
 
 router = APIRouter(
     tags=["Note"],
@@ -22,7 +22,7 @@ templates = Jinja2Templates(directory="app/templates")
 
 @router.get("/", response_class=HTMLResponse)
 async def get_home_page(
-    request: Request, db: AsyncSession = Depends(get_async_session)
+    request: Request, db: AsyncSession = Depends(db_helper.session_getter)
 ):
     result = await db.execute(select(Note))
     notes = result.scalars().all()
@@ -33,7 +33,7 @@ async def get_home_page(
 
 @router.post("/create_note")
 async def create_note(
-    db: AsyncSession = Depends(get_async_session),
+    db: AsyncSession = Depends(db_helper.session_getter),
     secret: str = Form(...),
     text: str = Form(...),
     lifetime_hours: int = Form(0),
@@ -91,7 +91,7 @@ async def get_result_id(request: Request, note_id: str):
 
 @router.post("/get_note")
 async def get_note(
-    db: AsyncSession = Depends(get_async_session),
+    db: AsyncSession = Depends(db_helper.session_getter),
     note_id: str = Form(...),
     note_secret: str = Form(...),
 ) -> JSONResponse:
@@ -136,7 +136,7 @@ async def get_result_note(request: Request, note_text: str, note_image: str = ""
 
 @router.get("/notes", response_class=JSONResponse)
 async def get_notes(
-    db: AsyncSession = Depends(get_async_session),
+    db: AsyncSession = Depends(db_helper.session_getter),
     page: int = Query(1, ge=1),
     per_page: int = Query(3, ge=1, le=100),
 ) -> JSONResponse:

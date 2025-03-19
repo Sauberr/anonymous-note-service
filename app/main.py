@@ -12,19 +12,18 @@ from app.notes.router import router as note_router
 from app.users.router import router as user_router
 from app.webhooks.user import router as webhook_router
 from app.create_fastapi_app import create_app
-from app.core.db_session import engine
+from app.core.models.db_helper import db_helper
 
 main_app = create_app()
 main_app.mount("/static", StaticFiles(directory="app/static"), name="static")
 
 admin = Admin(
     main_app,
-    engine,
+    db_helper.engine,
     title="FastAPI Admin",
     base_url="/admin",
-    logo_url="/static/images/logo.png",
+    logo_url="static/images/logo.png",
 )
-
 
 admin.add_view(UserAdmin)
 admin.add_view(NoteAdmin)
