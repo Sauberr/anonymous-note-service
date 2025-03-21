@@ -12,9 +12,11 @@ from app.notes.models import Note
 from app.notes.services import get_note_id, is_ephemeral_note, is_lifetime_note
 from app.utils.downloading_pictures import download_image
 from app.core.models.db_helper import db_helper
+from app.core.config import settings
 
 router = APIRouter(
     tags=["Note"],
+    prefix=settings.api.v1.notes,
 )
 
 templates = Jinja2Templates(directory="app/templates")

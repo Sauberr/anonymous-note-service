@@ -8,7 +8,7 @@ from app.dependencies.fastapi_users import fastapi_users
 from app.users.schemas import UserCreate, UserRead
 
 router = APIRouter(
-    prefix=settings.api.v1.auth,
+    prefix=settings.auth,
     tags=["Auth"],
 )
 
