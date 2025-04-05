@@ -3,23 +3,23 @@ from secrets import compare_digest
 
 from fastapi import APIRouter, Depends, File, Form, Query, Request, UploadFile, status
 from fastapi.responses import HTMLResponse
-from fastapi.templating import Jinja2Templates
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from starlette.responses import JSONResponse
+from fastapi_babel import _
+from urllib.parse import quote, unquote
 
 from app.notes.models import Note
 from app.notes.services import get_note_id, is_ephemeral_note, is_lifetime_note
 from app.utils.downloading_pictures import download_image
 from app.core.models.db_helper import db_helper
 from app.core.config import settings
+from app.core.templates import templates
 
 router = APIRouter(
     tags=["Note"],
     prefix=settings.api.v1.notes,
 )
-
-templates = Jinja2Templates(directory="app/templates")
 
 
 @router.get("/", response_class=HTMLResponse)
@@ -51,7 +51,7 @@ async def create_note(
             status_code=status.HTTP_400_BAD_REQUEST,
             content={
                 "response": "error",
-                "error": "Ephemeral notes cannot have a lifetime",
+                "error": _("Ephemeral notes cannot have a lifetime"),
             },
         )
 
@@ -106,7 +106,7 @@ async def get_note(
                 status_code=status.HTTP_404_NOT_FOUND,
                 content={
                     "response": "error",
-                    "note_final_text": "Such a note does not exist",
+                    "note_final_text": _("Such a note does not exist"),
                 },
             )
 
@@ -124,7 +124,7 @@ async def get_note(
         )
     return JSONResponse(
         status_code=status.HTTP_404_NOT_FOUND,
-        content={"response": "error", "note_final_text": "Such a note does not exist"},
+        content={"response": "error", "note_final_text": _("Such a note does not exist")},
     )
 
 

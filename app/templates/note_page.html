@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="{{ locale }}">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Result</title>
+  <title>{{ _("Note Content") }}</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
   <link rel="icon" type="image/x-icon" href="{{ url_for('static', path='images/icon.png') }}"/>
 </head>
@@ -13,12 +13,12 @@
       <div class="col s12 m8 offset-m2">
         <div class="card">
           <div class="card-content">
-            <span class="card-title">Note content:</span>
+            <span class="card-title">{{ _("Note content:") }}</span>
             <p id="noteText">{{ note_text }}</p>
             {% if note_image %}
               <div class="note-image">
                 <img src="{{ url_for('static', path='images/' + note_image) }}"
-                     alt="Note image" style="max-width:100%; height:auto;">
+                     alt="{{ _('Note image') }}" style="max-width:100%; height:auto;">
               </div>
             {% endif %}
           </div>
@@ -27,7 +27,7 @@
     </div>
     <div class="row">
       <div class="col s12 m8 offset-m2">
-        <button class="btn waves-effect waves-light" onclick="returnToRoot()">Return</button>
+        <button class="btn waves-effect waves-light" onclick="returnToRoot()">{{ _("Return") }}</button>
       </div>
     </div>
   </div>
@@ -40,7 +40,7 @@
     });
 
     function returnToRoot() {
-      document.location.href = '/';
+      document.location.href = '/api/v1/notes/';
     }
   </script>
 </body>

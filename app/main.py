@@ -8,8 +8,28 @@ from app.create_fastapi_app import create_app
 from app.core.models.db_helper import db_helper
 from app.api.router import router as api_router
 
+from fastapi_babel import Babel, BabelConfigs, BabelMiddleware
+
+from app.core.templates import templates
+
 main_app = create_app()
 main_app.mount("/static", StaticFiles(directory="app/static"), name="static")
+
+
+babel_configs = BabelConfigs(
+    ROOT_DIR=__file__,
+    BABEL_DEFAULT_LOCALE="en",
+    BABEL_TRANSLATION_DIRECTORY="locales",
+)
+
+babel = Babel(babel_configs)
+babel.install_jinja(templates)
+
+main_app.add_middleware(
+    BabelMiddleware,
+    babel_configs=babel_configs,
+    locale_selector=lambda request: request.cookies.get("locale", "en"),
+)
 
 admin = Admin(
     main_app,
@@ -37,3 +57,4 @@ if __name__ == "__main__":
         port=settings.run.port,
         reload=True,
     )
+    babel.run_cli()
