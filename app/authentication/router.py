@@ -1,5 +1,4 @@
 from fastapi import APIRouter
-from fastapi.templating import Jinja2Templates
 
 from app.authentication.oauth2 import google_oauth_client
 from app.core.config import settings
@@ -8,11 +7,9 @@ from app.dependencies.fastapi_users import fastapi_users
 from app.users.schemas import UserCreate, UserRead
 
 router = APIRouter(
-    prefix=settings.auth,
+    prefix=settings.api.v1.auth,
     tags=["Auth"],
 )
-
-templates = Jinja2Templates(directory="app/templates")
 
 
 router.include_router(
