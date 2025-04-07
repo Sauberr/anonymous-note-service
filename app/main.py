@@ -1,3 +1,5 @@
+import logging
+
 import uvicorn
 from fastapi.staticfiles import StaticFiles
 from sqladmin import Admin
@@ -11,6 +13,12 @@ from app.api.router import router as api_router
 from fastapi_babel import Babel, BabelConfigs, BabelMiddleware
 
 from app.core.templates import templates
+
+
+logging.basicConfig(
+    level=settings.logging.log_level,
+    format=settings.logging.log_format,
+)
 
 main_app = create_app()
 main_app.mount("/static", StaticFiles(directory="app/static"), name="static")

@@ -1,7 +1,7 @@
 from pydantic import BaseModel, PostgresDsn
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from pathlib import Path
-
+from typing import Literal
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
@@ -14,6 +14,24 @@ LOG_DEFAULT_FORMAT = (
 class RunConfig(BaseModel):
     host: str = "0.0.0.0"
     port: int = 8000
+
+
+class GunicornConfig(BaseModel):
+    host: str = "0.0.0.0"
+    port: int = 8000
+    workers: int = 4
+    timeout: int = 900
+
+
+class LoggingConfig(BaseModel):
+    log_level: Literal[
+        "DEBUG",
+        "INFO",
+        "WARNING",
+        "ERROR",
+        "CRITICAL",
+    ] = "INFO"
+    log_format: str = LOG_DEFAULT_FORMAT
 
 
 class ApiV1Prefix(BaseModel):
@@ -68,6 +86,8 @@ class Settings(BaseSettings):
     DEFAULT_PASSWORD: str
 
     run: RunConfig = RunConfig()
+    gunicorn: GunicornConfig = GunicornConfig()
+    logging: LoggingConfig = LoggingConfig()
     api: ApiPrefix = ApiPrefix()
     oauth2: Oauth2
     access_token: AccessToken
