@@ -1,7 +1,7 @@
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
-from app.notes.services import delete_expired_notes
 from app.core.models.db_helper import db_helper
+from app.notes.services import delete_expired_notes
 
 
 def start_scheduler():

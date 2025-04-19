@@ -3,8 +3,9 @@ from datetime import datetime, timezone
 
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
-from app.notes.models import Note
+
 from app.core.models.db_helper import DataBaseHelper
+from app.notes.models import Note
 
 
 def get_note_id(text: str, salt: str) -> str:

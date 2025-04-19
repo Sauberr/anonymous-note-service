@@ -3,9 +3,8 @@ from datetime import datetime
 from sqlalchemy import DateTime
 from sqlalchemy.orm import Mapped, mapped_column
 
-
-from app.core.models.mixin.int_id_pk import IdIntMixin
 from app.core.models.base import Base
+from app.core.models.mixin.int_id_pk import IdIntMixin
 
 
 class Note(Base, IdIntMixin):

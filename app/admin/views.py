@@ -1,9 +1,8 @@
 from sqladmin import ModelView
 
-from app.users.models import User
-from app.notes.models import Note
 from app.authentication.models import AccessToken, OAuthAccount
-
+from app.notes.models import Note
+from app.users.models import User
 
 
 class UserAdmin(ModelView, model=User):

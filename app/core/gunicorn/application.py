@@ -26,6 +26,5 @@ class Application(BaseApplication):
         }
 
     def load_config(self):
-        for key, value in  self.config_options.items():
+        for key, value in self.config_options.items():
             self.cfg.set(key.lower(), value)
-

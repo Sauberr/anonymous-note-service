@@ -5,11 +5,11 @@ from pydantic import EmailStr
 
 from app.authentication.user_manager import UserManager
 from app.core.config import settings
+from app.core.models.db_helper import db_helper
 from app.dependencies.user_manager import get_user_manager
 from app.dependencies.users import get_users_db
 from app.users.models import User
 from app.users.schemas import UserCreate
-from app.core.models.db_helper import db_helper
 
 get_async_session_context = contextlib.asynccontextmanager(db_helper.session_getter)
 get_users_db_context = contextlib.asynccontextmanager(get_users_db)

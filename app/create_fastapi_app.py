@@ -8,6 +8,7 @@ from fastapi.responses import ORJSONResponse
 from starlette.responses import HTMLResponse
 
 from app.core.lifespan import lifespan
+from app.errors_handlers import register_errors_handlers
 
 
 def register_static_docs_routes(app: FastAPI) -> None:
@@ -35,7 +36,7 @@ def register_static_docs_routes(app: FastAPI) -> None:
 
 
 def create_app(
-        create_custom_static_urls: bool = False,
+    create_custom_static_urls: bool = False,
 ) -> FastAPI:
     app = FastAPI(
         default_response_class=ORJSONResponse,
@@ -45,4 +46,6 @@ def create_app(
     )
     if create_custom_static_urls:
         register_static_docs_routes(app)
+
+    register_errors_handlers(app)
     return app

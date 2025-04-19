@@ -1,5 +1,7 @@
-from gunicorn.glogging import Logger
 from logging import Formatter
+
+from gunicorn.glogging import Logger
+
 from app.core.config import settings
 
 

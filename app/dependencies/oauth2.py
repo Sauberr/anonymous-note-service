@@ -3,8 +3,8 @@ from typing import TYPE_CHECKING, Annotated
 from fastapi import Depends
 
 from app.authentication.models import OAuthAccount
-from app.users.models import User
 from app.core.models.db_helper import db_helper
+from app.users.models import User
 
 if TYPE_CHECKING:
     from fastapi_users_db_sqlalchemy import SQLAlchemyUserDatabase
