@@ -1,0 +1,34 @@
+[tool.poetry]
+name = "anonymous-note-service"
+version = "0.1.0"
+description = ""
+authors = ["sauberr <sauberr10@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+fastapi = {extras = ["standart"], version = "^0.115.12"}
+fastapi-users = {extras = ["sqlalchemy"], version = "^14.0.1"}
+sqlalchemy = "^2.0.40"
+black = "^25.1.0"
+isort = "^6.0.1"
+ruff = "^0.11.7"
+uvicorn = {extras = ["standard"], version = "^0.34.2"}
+fastapi-babel = "^1.0.0"
+sqladmin = "^0.20.1"
+pydantic-settings = "^2.9.1"
+asyncpg = "^0.30.0"
+gunicorn = "^23.0.0"
+aiohttp = "^3.11.18"
+httpx-oauth = "^0.16.1"
+uuid-utils = "^0.10.0"
+apscheduler = "^3.11.0"
+orjson = "^3.10.16"
+alembic = "^1.15.2"
+pytest = "^8.3.5"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
