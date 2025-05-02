@@ -20,5 +20,5 @@ COPY . .
 RUN chmod +x app/run_main.py
 RUN chmod +x app/prestart.sh
 
-ENTRYPOINT ["app/prestart.sh"]
+ENTRYPOINT ["app/commands/prestart.sh"]
 CMD ["python", "-m", "app.run_main"]
