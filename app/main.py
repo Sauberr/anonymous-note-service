@@ -8,7 +8,7 @@ from app.api.router import router as api_router
 from app.core.config import settings
 from app.create_fastapi_app import create_app
 from app.localization import babel
-from app.middleware import setup_middleware
+from app.middlewares import setup_middleware
 
 logging.basicConfig(
     level=settings.logging.log_level,

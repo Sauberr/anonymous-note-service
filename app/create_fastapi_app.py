@@ -9,6 +9,7 @@ from starlette.responses import HTMLResponse
 
 from app.core.lifespan import lifespan
 from app.errors_handlers import register_errors_handlers
+from app.middlewares import setup_middleware
 
 
 def register_static_docs_routes(app: FastAPI) -> None:
@@ -48,4 +49,5 @@ def create_app(
         register_static_docs_routes(app)
 
     register_errors_handlers(app)
+    setup_middleware(app)
     return app
