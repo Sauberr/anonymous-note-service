@@ -7,6 +7,7 @@ from app.core.config import settings
 from app.notes.router import router as note_router
 from app.users.router import router as user_router
 from app.webhooks.user import router as webhook_router
+from app.authentication.service import router as service_router
 
 http_bearer = HTTPBearer(auto_error=True)
 
@@ -23,5 +24,6 @@ router.include_router(
 )
 router.include_router(auth_router)
 router.include_router(message_router)
+router.include_router(service_router)
 
 router.include_router(webhook_router)
