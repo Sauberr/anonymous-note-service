@@ -42,7 +42,7 @@ All actions should be executed from the source directory of the project and only
 
 ## License
 
-This project uses the [MIT] license(https://github.com/Sauberr/gallery/blob/master/LICENSE)
+This project uses the [MIT] license(https://github.com/Sauberr/anonymous-note-service/blob/master/LICENSE)
 
 ## Contact 
 
