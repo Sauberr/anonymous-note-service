@@ -8,9 +8,12 @@ The platform leverages PostgreSQL for robust relational data storage. For asynch
 
 Development and dependency management are optimized with Poetry, replacing pip for better reproducibility and convenience. The application is deployed with Gunicorn, delivering fast response times and efficient resource usage.
 
+For comprehensive testing coverage, we use pytest. This tool is chosen due to its simplicity, flexibility, and popularity within the Python community. Pytest allows us to ensure code quality and reliability, as all core features and endpoints are covered by automated tests. This results in a more robust and maintainable application.
+
 To ensure portability and ease of deployment, the entire application runs inside Docker containers, enabling consistent environments across development, testing, and production.
 
 Overall, Anonymous Note Service offers a secure, scalable, and user-friendly environment for anonymous sharing, combining a thoughtful tech stack with modern best practices in Python web development.
+
 
 ## Stack:
 
