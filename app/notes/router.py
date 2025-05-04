@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta, timezone
 from secrets import compare_digest
 
-from fastapi import APIRouter, Depends, File, Form, Query, Request, UploadFile
+from fastapi import APIRouter, Depends, File, Form, Query, Request, UploadFile, status
 from fastapi.responses import HTMLResponse, ORJSONResponse
 from fastapi_babel import _
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -14,6 +14,7 @@ from app.errors_handlers import bad_request, not_found, success_response
 from app.notes.models import Note
 from app.notes.services import get_note_id, is_ephemeral_note, is_lifetime_note
 from app.utils.downloading_pictures import download_image
+from app.schemas.common import MessageErrorSchema
 
 router = APIRouter(
     tags=["Note"],
@@ -21,7 +22,16 @@ router = APIRouter(
 )
 
 
-@router.get("/", response_class=HTMLResponse)
+@router.get(
+    "/",
+    response_class=HTMLResponse,
+    summary="Main page",
+    response_description="Main page with the number of notes",
+    status_code=status.HTTP_200_OK,
+    responses={
+        400: {"model": MessageErrorSchema, "description": "Bad request"},
+    },
+)
 async def get_home_page(
     request: Request, db: AsyncSession = Depends(db_helper.session_getter)
 ):
@@ -32,7 +42,16 @@ async def get_home_page(
     )
 
 
-@router.post("/create_note")
+@router.post(
+    "/create_note",
+    summary="Create a note",
+    response_description="Create a note",
+    status_code=status.HTTP_201_CREATED,
+    responses={
+        400: {"model": MessageErrorSchema, "description": "Bad request"},
+        404: {"model": MessageErrorSchema, "description": "Not found"},
+    },
+)
 async def create_note(
     db: AsyncSession = Depends(db_helper.session_getter),
     secret: str = Form(...),
@@ -79,14 +98,33 @@ async def create_note(
     return success_response({"note_id": note_id})
 
 
-@router.get("/result/{note_id}", response_class=HTMLResponse)
+@router.get(
+    "/result/{note_id}",
+    response_class=HTMLResponse,
+    summary="Get result page",
+    response_description="Get result page",
+    status_code=status.HTTP_200_OK,
+    responses={
+        400: {"model": MessageErrorSchema, "description": "Bad request"},
+        404: {"model": MessageErrorSchema, "description": "Not found"},
+    },
+)
 async def get_result_id(request: Request, note_id: str):
     return templates.TemplateResponse(
         request, "hash_storage.html", {"note_id": note_id}
     )
 
 
-@router.post("/get_note")
+@router.post(
+    "/get_note",
+    summary="Get a note",
+    response_description="Get a note",
+    status_code=status.HTTP_200_OK,
+    responses={
+        400: {"model": MessageErrorSchema, "description": "Bad request"},
+        404: {"model": MessageErrorSchema, "description": "Not found"},
+    },
+)
 async def get_note(
     db: AsyncSession = Depends(db_helper.session_getter),
     note_id: str = Form(...),
@@ -113,7 +151,17 @@ async def get_note(
     return not_found(_("Such a note does not exist"))
 
 
-@router.get("/note_page/{note_text}", response_class=HTMLResponse)
+@router.get(
+    "/note_page/{note_text}",
+    response_class=HTMLResponse,
+    summary="Get the current content of the note",
+    response_description="Get the current content of the note",
+    status_code=status.HTTP_200_OK,
+    responses={
+        400: {"model": MessageErrorSchema, "description": "Bad request"},
+        404: {"model": MessageErrorSchema, "description": "Not found"},
+    },
+)
 async def get_result_note(request: Request, note_text: str, note_image: str = ""):
     return templates.TemplateResponse(
         request,
@@ -122,7 +170,17 @@ async def get_result_note(request: Request, note_text: str, note_image: str = ""
     )
 
 
-@router.get("/notes", response_class=ORJSONResponse)
+@router.get(
+    "/notes",
+    response_class=ORJSONResponse,
+    summary="Paginated notes",
+    response_description="Paginated notes",
+    status_code=status.HTTP_200_OK,
+    responses={
+        400: {"model": MessageErrorSchema, "description": "Bad request"},
+        404: {"model": MessageErrorSchema, "description": "Not found"},
+    },
+)
 async def get_notes(
     db: AsyncSession = Depends(db_helper.session_getter),
     page: int = Query(1, ge=1),

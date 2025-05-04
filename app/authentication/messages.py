@@ -1,6 +1,6 @@
 from typing import Annotated
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, status
 
 from app.core.config import settings
 from app.dependencies.fastapi_users import (current_active_superuser,
@@ -33,7 +33,18 @@ def get_user_messages(
     }
 
 
-@router.get("/secrets")
+@router.get(
+    "/secrets",
+    summary="Get superuser messages",
+    response_description="Superuser messages",
+    response_model=dict,
+    status_code=status.HTTP_200_OK,
+    responses={
+        400: {
+            "description": "Bad request",
+        },
+    },
+)
 def get_superuser_messages(
     user: Annotated[User, Depends(current_active_superuser)],
 ):
