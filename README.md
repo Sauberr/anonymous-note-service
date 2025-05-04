@@ -1,10 +1,10 @@
 ### 📝 Anonymous Note Service
 
-Anonymous Note Service is a modern web platform that allows users to create and share notes anonymously. Users can choose to make their notes temporary—with automatic expiration after a set time—or persistent, remaining available until manually deleted. Each note can optionally include an image, offering a flexible and expressive way to communicate.
+Anonymous Note Service is a modern web platform that allows users to create and share notes anonymously. Users can choose to make their notes temporary — with automatic expiration after a set time — or persistent, remaining available until manually deleted. Each note can optionally include an image, offering a flexible and expressive way to communicate.
 
 The backend is built with FastAPI, ensuring high performance and scalability. Localization support is provided by fastapi-babel, making the service accessible to a global audience. User authentication is handled securely using fastapi-users and OAuth2, supporting both traditional and social logins.
 
-The platform leverages PostgreSQL for robust relational data storage. For asynchronous and scheduled background tasks—such as note expiration—the APScheduler library is utilized, ensuring timely and efficient task execution. Administration is streamlined with a custom admin panel built using SQLAdmin, providing powerful tools to manage users and content.
+The platform leverages PostgreSQL for robust relational data storage. For asynchronous and scheduled background tasks — such as note expiration — the APScheduler library is utilized, ensuring timely and efficient task execution. Administration is streamlined with a custom admin panel built using SQLAdmin, providing powerful tools to manage users and content.
 
 Development and dependency management are optimized with Poetry, replacing pip for better reproducibility and convenience. The application is deployed with Gunicorn, delivering fast response times and efficient resource usage.
 
