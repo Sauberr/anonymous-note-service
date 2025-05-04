@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING
 
-from fastapi_users_db_sqlalchemy import SQLAlchemyBaseUserTable, SQLAlchemyUserDatabase
+from fastapi_users_db_sqlalchemy import (SQLAlchemyBaseUserTable,
+                                         SQLAlchemyUserDatabase)
 from sqlalchemy.orm import Mapped, relationship
 
 from app.authentication.models import OAuthAccount

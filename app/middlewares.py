@@ -2,13 +2,12 @@ import logging
 import time
 
 from fastapi import FastAPI, Request, Response
-from fastapi_babel import BabelMiddleware
-
-from app.localization import babel_configs
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi_babel import BabelMiddleware
 from starlette.middleware.base import BaseHTTPMiddleware
 
 from app.core.types.call_next import CallNext
+from app.localization import babel_configs
 from app.requests_count_middleware import requests_count_middleware_dispatch
 
 log = logging.getLogger(__name__)
@@ -46,6 +45,7 @@ async def add_process_time_to_requests(
     response.headers["X-Process-Time"] = f"{process_time:.5f}s"
     return response
 
+
 def setup_middleware(app: FastAPI) -> None:
 
     app.add_middleware(
@@ -80,4 +80,3 @@ def setup_middleware(app: FastAPI) -> None:
         return await call_next(request)
 
     app.middleware("http")(add_process_time_to_requests)
-

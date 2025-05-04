@@ -2,7 +2,8 @@ import logging
 import re
 from typing import TYPE_CHECKING, Optional, Union
 
-from fastapi_users import BaseUserManager, IntegerIDMixin, InvalidPasswordException
+from fastapi_users import (BaseUserManager, IntegerIDMixin,
+                           InvalidPasswordException)
 
 from app.core.config import settings
 from app.core.types.user_id import UserIdType

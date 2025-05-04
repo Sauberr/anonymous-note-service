@@ -3,6 +3,7 @@ from secrets import compare_digest
 
 from fastapi import APIRouter, Depends, File, Form, Query, Request, UploadFile
 from fastapi.responses import HTMLResponse, ORJSONResponse
+from fastapi_babel import _
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 
@@ -27,7 +28,7 @@ async def get_home_page(
     result = await db.execute(select(Note))
     notes = result.scalars().all()
     return templates.TemplateResponse(
-        "index.html", {"request": request, "notes_count": len(notes)}
+        request, "index.html", {"notes_count": len(notes)}
     )
 
 
@@ -45,7 +46,7 @@ async def create_note(
     if is_ephemeral and (
         lifetime_hours > 0 or lifetime_minutes > 0 or lifetime_seconds > 0
     ):
-        return bad_request("Ephemeral notes cannot have a lifetime")
+        return bad_request(_("Ephemeral notes cannot have a lifetime"))
 
     lifetime = None
     seconds_in_hour: int = 3600
@@ -81,7 +82,7 @@ async def create_note(
 @router.get("/result/{note_id}", response_class=HTMLResponse)
 async def get_result_id(request: Request, note_id: str):
     return templates.TemplateResponse(
-        "hash_storage.html", {"request": request, "note_id": note_id}
+        request, "hash_storage.html", {"note_id": note_id}
     )
 
 
@@ -96,7 +97,7 @@ async def get_note(
 
     if note and compare_digest(str(note.secret), str(note_secret)):
         if await is_lifetime_note(note, db):
-            return not_found("Such a note does not exist")
+            return not_found(_("Such a note does not exist"))
 
         note_text = note.text
         note_image = note.image or ""
@@ -109,14 +110,15 @@ async def get_note(
                 "note_image": note_image,
             }
         )
-    return not_found("Such a note does not exist")
+    return not_found(_("Such a note does not exist"))
 
 
 @router.get("/note_page/{note_text}", response_class=HTMLResponse)
 async def get_result_note(request: Request, note_text: str, note_image: str = ""):
     return templates.TemplateResponse(
+        request,
         "note_page.html",
-        {"request": request, "note_text": note_text, "note_image": note_image},
+        {"note_text": note_text, "note_image": note_image},
     )
 
 

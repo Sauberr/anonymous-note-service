@@ -8,6 +8,7 @@ router = APIRouter(
     tags=["Service"],
 )
 
+
 @router.get("/stats")
 def get_path_stats():
     return {

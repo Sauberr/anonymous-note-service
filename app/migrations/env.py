@@ -1,5 +1,5 @@
-import sys
 import asyncio
+import sys
 from logging.config import fileConfig
 from os.path import abspath, dirname
 

@@ -1,7 +1,8 @@
 from fastapi import FastAPI
 from sqladmin import Admin
 
-from app.admin.views import AccessTokensAdmin, NoteAdmin, OAuthAccountAdmin, UserAdmin
+from app.admin.views import (AccessTokensAdmin, NoteAdmin, OAuthAccountAdmin,
+                             UserAdmin)
 from app.core.models.db_helper import db_helper
 
 

@@ -2,9 +2,7 @@ from typing import TYPE_CHECKING
 
 from fastapi_users_db_sqlalchemy import SQLAlchemyBaseOAuthAccountTable
 from fastapi_users_db_sqlalchemy.access_token import (
-    SQLAlchemyAccessTokenDatabase,
-    SQLAlchemyBaseAccessTokenTable,
-)
+    SQLAlchemyAccessTokenDatabase, SQLAlchemyBaseAccessTokenTable)
 from sqlalchemy import ForeignKey, Integer
 from sqlalchemy.orm import Mapped, declared_attr, mapped_column
 
