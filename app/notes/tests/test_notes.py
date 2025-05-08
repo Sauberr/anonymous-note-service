@@ -1,3 +1,4 @@
+import io
 from datetime import datetime, timedelta, timezone
 from unittest.mock import AsyncMock, MagicMock, patch
 
@@ -73,6 +74,40 @@ async def test_create_note(client, mock_db, mock_db_dependency):
 
     mock_db.add.assert_called_once()
     mock_db.commit.assert_called_once()
+
+
+@pytest.mark.asyncio
+async def test_create_note_with_image(client, mock_db, mock_db_dependency):
+    """Test creating a note with an image upload."""
+
+    mock_db.commit = AsyncMock()
+    image_data = io.BytesIO(b"fake-image-content")
+    image_file = ("file", ("test_image.png", image_data, "image/png"))
+
+    with patch("app.notes.router") as mock_uuid:
+        mock_uuid.return_value.hex = "fakeuuid"
+        response = client.post(
+            CREATE_NOTE_URL,
+            data={
+                "secret": "test_secret",
+                "text": "Note with image",
+                "lifetime_hours": 0,
+                "lifetime_minutes": 0,
+                "lifetime_seconds": 0,
+                "is_ephemeral": False,
+            },
+            files={"image": ("test_image.png", image_data, "image/png")},
+        )
+
+    assert response.status_code == status.HTTP_200_OK
+    assert "note_id" in response.json()
+
+    mock_db.add.assert_called_once()
+    mock_db.commit.assert_called_once()
+    args, _ = mock_db.add.call_args
+    note_obj = args[0]
+    assert hasattr(note_obj, "image")
+    assert note_obj.image is not None
 
 
 @pytest.mark.asyncio
