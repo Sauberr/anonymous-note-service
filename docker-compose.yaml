@@ -4,11 +4,27 @@ services:
         dockerfile: ./Dockerfile
         context: ./
       environment:
-        APP_CONFIG__DB__URL: postgresql+asyncpg://postgres:postgres@pg:5432/anonymous-note-service
+        APP_CONFIG__DB__URL: postgresql+asyncpg://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}
       ports:
           - "8000:8000"
       volumes:
           - .:/app
+      env_file:
+        - .env
+      depends_on:
+        pg:
+          condition: service_healthy
+
+    tests:
+      build:
+        dockerfile: ./Dockerfile
+        context: ./
+      entrypoint: ""
+      command: [ "pytest", "-v", "app/notes/tests" ]
+      environment:
+        APP_CONFIG__DB__URL: postgresql+asyncpg://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}
+      volumes:
+        - .:/app
       env_file:
         - .env
       depends_on:
