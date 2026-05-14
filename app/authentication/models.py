@@ -15,12 +15,6 @@ if TYPE_CHECKING:
 
 
 class OAuthAccount(Base, IdIntMixin, SQLAlchemyBaseOAuthAccountTable[UserIdType]):
-    user_id: Mapped[UserIdType] = mapped_column(
-        Integer,
-        ForeignKey("users.id", ondelete="cascade"),
-        nullable=False,
-    )
-
     @declared_attr
     def user_id(cls) -> Mapped[UserIdType]:
         return mapped_column(

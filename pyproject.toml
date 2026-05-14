@@ -8,7 +8,7 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.12"
-fastapi = {extras = ["standart"], version = "^0.115.12"}
+fastapi = {extras = ["standard"], version = "^0.115.12"}
 fastapi-users = {extras = ["sqlalchemy"], version = "^14.0.1"}
 sqlalchemy = "^2.0.40"
 black = "^25.1.0"
@@ -16,7 +16,7 @@ isort = "^6.0.1"
 ruff = "^0.11.7"
 uvicorn = {extras = ["standard"], version = "^0.34.2"}
 fastapi-babel = "^1.0.0"
-sqladmin = "^0.20.1"
+fastadmin = "^0.4.9"
 pydantic-settings = "^2.9.1"
 asyncpg = "^0.30.0"
 gunicorn = "^23.0.0"
@@ -28,7 +28,13 @@ orjson = "^3.10.16"
 alembic = "^1.15.2"
 pytest = "^8.3.5"
 pytest-asyncio = "^0.26.0"
+jinja2 = "^3.1.6"
 
+
+[tool.pytest.ini_options]
+asyncio_mode = "strict"
+asyncio_default_fixture_loop_scope = "function"
+testpaths = ["app"]
 
 [build-system]
 requires = ["poetry-core"]

@@ -12,7 +12,7 @@ class Note(Base, IdIntMixin):
 
     text: Mapped[str] = mapped_column(nullable=False)
     secret: Mapped[str] = mapped_column(nullable=False)
-    note_hash: Mapped[str] = mapped_column(default=None)
+    note_hash: Mapped[str] = mapped_column(nullable=False)
     is_ephemeral: Mapped[bool] = mapped_column(default=False, nullable=False)
     lifetime: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=True)
     image: Mapped[str] = mapped_column(nullable=True)

@@ -4,6 +4,7 @@ from secrets import compare_digest
 from fastapi import APIRouter, Depends, File, Form, Query, Request, UploadFile, status
 from fastapi.responses import HTMLResponse, ORJSONResponse
 from fastapi_babel import _
+from sqlalchemy import func
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 
@@ -35,10 +36,9 @@ router = APIRouter(
 async def get_home_page(
     request: Request, db: AsyncSession = Depends(db_helper.session_getter)
 ):
-    result = await db.execute(select(Note))
-    notes = result.scalars().all()
+    notes_count = await db.scalar(select(func.count()).select_from(Note))
     return templates.TemplateResponse(
-        request, "index.html", {"notes_count": len(notes)}
+        request, "index.html", {"notes_count": notes_count or 0}
     )
 
 
@@ -46,7 +46,7 @@ async def get_home_page(
     "/create_note",
     summary="Create a note",
     response_description="Create a note",
-    status_code=status.HTTP_201_CREATED,
+    status_code=status.HTTP_200_OK,
     responses={
         400: {"model": MessageErrorSchema, "description": "Bad request"},
         404: {"model": MessageErrorSchema, "description": "Not found"},
@@ -131,7 +131,7 @@ async def get_note(
     note_secret: str = Form(...),
 ) -> ORJSONResponse:
     result = await db.execute(select(Note).where(Note.note_hash == note_id))
-    note = result.scalar_one_or_none()
+    note = result.scalars().first()
 
     if note and compare_digest(str(note.secret), str(note_secret)):
         if await is_lifetime_note(note, db):
@@ -140,7 +140,7 @@ async def get_note(
         note_text = note.text
         note_image = note.image or ""
 
-        is_ephemeral = await is_ephemeral_note(note, db)
+        await is_ephemeral_note(note, db)
 
         return success_response(
             {
@@ -187,13 +187,14 @@ async def get_notes(
     per_page: int = Query(3, ge=1, le=100),
 ) -> ORJSONResponse:
     offset = (page - 1) * per_page
+    total = await db.scalar(select(func.count()).select_from(Note)) or 0
     result = await db.execute(select(Note).offset(offset).limit(per_page))
     notes = result.scalars().all()
     notes_data = [
         {
             "id": note.id,
             "text": note.text,
-            "image": note.image if hasattr(note, "image") else None,
+            "image": note.image,
         }
         for note in notes
     ]
@@ -202,6 +203,6 @@ async def get_notes(
             "notes": notes_data,
             "page": page,
             "per_page": per_page,
-            "total_notes": len(notes),
+            "total_notes": total,
         }
     )

@@ -1,52 +1,196 @@
-### 📝 Anonymous Note Service
+<h1 align="center">🔒 Anonymous Note Service</h1>
 
-Anonymous Note Service is a modern web platform that allows users to create and share notes anonymously. Users can choose to make their notes temporary — with automatic expiration after a set time — or persistent, remaining available until manually deleted. Each note can optionally include an image, offering a flexible and expressive way to communicate.
+<p align="center">
+  <img src="https://img.shields.io/badge/Python-3.12+-blue?style=for-the-badge&logo=python&logoColor=white">
+  <img src="https://img.shields.io/badge/FastAPI-0.115+-green?style=for-the-badge&logo=fastapi&logoColor=white">
+  </br>
+  <img src="https://img.shields.io/badge/PostgreSQL-16+-blue?style=for-the-badge&logo=postgresql&logoColor=white">
+  <img src="https://img.shields.io/badge/SQLAlchemy-2.0+-red?style=for-the-badge&logo=sqlalchemy&logoColor=white">
+  </br>
+  <img src="https://img.shields.io/badge/Docker-Ready-blue?style=for-the-badge&logo=docker&logoColor=white">
+  <img src="https://img.shields.io/badge/OAuth2-Google-orange?style=for-the-badge&logo=google&logoColor=white">
+  </br>
+  <img src="https://img.shields.io/badge/Admin-FastAdmin-purple?style=for-the-badge&logo=react&logoColor=white">
+  <img src="https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge">
+</p>
 
-The backend is built with FastAPI, ensuring high performance and scalability. Localization support is provided by fastapi-babel, making the service accessible to a global audience. User authentication is handled securely using fastapi-users and OAuth2, supporting both traditional and social logins.
+<h2 align="left">📋 About</h2>
 
-The platform leverages PostgreSQL for robust relational data storage. For asynchronous and scheduled background tasks — such as note expiration — the APScheduler library is utilized, ensuring timely and efficient task execution. Administration is streamlined with a custom admin panel built using SQLAdmin, providing powerful tools to manage users and content.
+**Anonymous Note Service** is a modern, privacy-first platform for creating and sharing notes without revealing your identity. Built with **FastAPI** and **Python 3.12+**, it provides a fast, secure, and scalable backend for anonymous communication.
 
-Development and dependency management are optimized with Poetry, replacing pip for better reproducibility and convenience. The application is deployed with Gunicorn, delivering fast response times and efficient resource usage.
+Users can create notes with optional image attachments, set them as ephemeral (auto-deleted after one read) or permanent, and configure custom expiration times. Each note is protected by a secret key — only those who know it can access the content.
 
-For comprehensive testing coverage, we use pytest. This tool is chosen due to its simplicity, flexibility, and popularity within the Python community. Pytest allows us to ensure code quality and reliability, as all core features and endpoints are covered by automated tests. This results in a more robust and maintainable application.
+The service features full **OAuth2 social authentication** (Google), **JWT-based access tokens**, and a beautiful **React-powered admin dashboard** with real-time charts and statistics. Background tasks like note expiration are handled automatically by **APScheduler**.
 
-To ensure portability and ease of deployment, the entire application runs inside Docker containers, enabling consistent environments across development, testing, and production.
+---
 
-Overall, Anonymous Note Service offers a secure, scalable, and user-friendly environment for anonymous sharing, combining a thoughtful tech stack with modern best practices in Python web development.
+## 🛠️ Stack
 
+| Layer | Technology |
+|-------|-----------|
+| **Language** | [Python 3.12+](https://python.org/) |
+| **Framework** | [FastAPI 0.115+](https://fastapi.tiangolo.com/) |
+| **Database** | [PostgreSQL 16+](https://postgresql.org/) |
+| **ORM** | [SQLAlchemy 2.0+](https://sqlalchemy.org/) with asyncpg |
+| **Migrations** | [Alembic](https://alembic.sqlalchemy.org/) |
+| **Auth** | [FastAPI Users](https://fastapi-users.github.io/fastapi-users/) + OAuth2 |
+| **Admin Panel** | [FastAdmin](https://github.com/vsdudakov/fastadmin) (React UI) |
+| **Scheduler** | [APScheduler](https://apscheduler.readthedocs.io/) |
+| **Server** | [Uvicorn](https://www.uvicorn.org/) + [Gunicorn](https://gunicorn.org/) |
+| **Deployment** | [Docker](https://docker.com/) + Docker Compose |
+| **Testing** | [pytest](https://pytest.org/) + pytest-asyncio |
+| **Code Quality** | Black, Ruff, isort |
 
-## Stack:
+---
 
-- [Python](https://www.python.org/downloads/)
-- [PostgreSQL](https://www.postgresql.org/)
-- [FastApi](https://fastapi.tiangolo.com/)
-- [Docker](https://www.docker.com/)
+## 🚀 Features
 
-## Local Developing
+- **Anonymous Notes** — create notes without registration, protected by a secret key
+- **Ephemeral Mode** — notes auto-delete after being read once
+- **Custom Expiry** — set a lifetime for any note
+- **Image Attachments** — optionally attach an image to a note
+- **OAuth2 Authentication** — Google social login support
+- **JWT Tokens** — secure session management
+- **Admin Dashboard** — React-based admin panel at `/admin` with:
+  - Full CRUD for users, notes, tokens, OAuth accounts
+  - Live charts: user status, note types, provider distribution
+  - Bulk actions: activate/deactivate users, delete expired notes
+- **Localization** — i18n support via fastapi-babel
+- **Background Tasks** — automatic note expiration via APScheduler
+- **Docker Ready** — fully containerized with Docker Compose
 
-All actions should be executed from the source directory of the project and only after installing all requirements.
+---
 
-1. Firstly, create and activate a new virtual environment and install dependencies with Poetry:
-   ```bash
-   poetry install
-   ```
+## ⚡ Quick Start with Docker
 
-2. Run database migrations using Alembic:
-   ```bash
-   alembic upgrade head
-   ```
-   
-## Docker
-   ```bash
-   docker build .
-   
-   docker-compose up
-   ```
+```bash
+# 1. Clone the repository
+git clone https://github.com/Sauberr/anonymous-note-service.git
+cd anonymous-note-service
 
-## License
+# 2. Copy environment file
+cp test.env .env
 
-This project uses the [MIT] license(https://github.com/Sauberr/anonymous-note-service/blob/master/LICENSE)
+# 3. Start all services
+docker compose up --build -d
 
-## Contact 
+# 4. Run migrations
+docker compose exec backend alembic upgrade head
 
-To contact the author of the project, write to email 𝚍𝚖𝚒𝚝𝚛𝚒𝚢𝚋𝚒𝚛𝚒𝚕𝚔𝚘@𝚐𝚖𝚊𝚒𝚕.𝚌𝚘𝚖.
+# 5. Create superuser for admin panel
+docker compose exec backend python -m app.actions.create_superuser
+```
+
+Access the app:
+- **Main app**: http://localhost:8000
+- **Admin panel**: http://localhost:8000/admin
+- **API docs**: http://localhost:8000/docs
+
+---
+
+## 🛠️ Local Development
+
+### Prerequisites
+
+- Python 3.12+
+- Poetry
+- PostgreSQL 16 (or Docker)
+
+### Steps
+
+**1. Clone and install dependencies:**
+```bash
+git clone https://github.com/Sauberr/anonymous-note-service.git
+cd anonymous-note-service
+poetry install
+```
+
+**2. Configure environment:**
+```bash
+cp test.env .env
+```
+
+Open `.env` and set your values:
+```env
+APP_CONFIG__DB__URL=postgresql+asyncpg://user:password@localhost:5433/dbname
+
+APP_CONFIG__DEFAULT_EMAIL=admin@example.com
+APP_CONFIG__DEFAULT_PASSWORD=YourStrongPassword!
+
+APP_CONFIG__ACCESS_TOKEN__RESET_PASSWORD_TOKEN_SECRET=your-secret-key
+APP_CONFIG__ACCESS_TOKEN__VERIFICATION_TOKEN_SECRET=your-secret-key
+
+APP_CONFIG__OAUTH2__CLIENT_ID=your-google-client-id
+APP_CONFIG__OAUTH2__CLIENT_SECRET=your-google-client-secret
+```
+
+**3. Start PostgreSQL:**
+```bash
+docker compose up pg -d
+```
+
+**4. Apply migrations:**
+```bash
+poetry run alembic upgrade head
+```
+
+**5. Create admin superuser:**
+```bash
+poetry run python -m app.actions.create_superuser
+```
+
+**6. Run the server:**
+```bash
+poetry run uvicorn app.main:main_app --reload --port 8000
+```
+
+---
+
+## 🧪 Running Tests
+
+```bash
+# Via Docker
+docker compose up tests
+
+# Locally
+poetry run pytest app/notes/tests -v
+```
+
+---
+
+## 📡 API Endpoints
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `GET` | `/` | Main page |
+| `POST` | `/api/v1/notes/` | Create a note |
+| `POST` | `/api/v1/notes/{hash}` | Get a note by hash + secret |
+| `GET` | `/api/v1/notes/{hash}` | Get note result page |
+| `GET` | `/api/v1/notes/list` | Paginated notes list |
+| `POST` | `/api/v1/auth/login` | Login (JWT) |
+| `POST` | `/api/v1/auth/register` | Register |
+| `GET` | `/api/v1/auth/google/authorize` | OAuth2 Google login |
+| `GET` | `/admin` | Admin dashboard |
+| `GET` | `/docs` | Swagger UI |
+
+---
+
+## 🐳 Docker Services
+
+| Service | Description | Port |
+|---------|-------------|------|
+| `backend` | FastAPI application | `8000` |
+| `pg` | PostgreSQL 16 database | `5433` |
+| `pgadmin` | pgAdmin UI | `8080` |
+
+---
+
+## 📜 License
+
+This project is licensed under the [MIT License](https://github.com/Sauberr/anonymous-note-service/blob/master/LICENSE).
+
+---
+
+## 📞 Contact
+
+For questions or feedback, reach out at **dmitriybirilko@gmail.com**

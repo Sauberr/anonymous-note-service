@@ -18,6 +18,9 @@ class User(Base, IdIntMixin, SQLAlchemyBaseUserTable[UserIdType]):
         "OAuthAccount", lazy="joined"
     )
 
+    def __str__(self) -> str:
+        return f"User: {self.email}"
+
     @classmethod
     def get_db(cls, session: "AsyncSession"):
         return SQLAlchemyUserDatabase(session, cls)

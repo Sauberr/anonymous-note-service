@@ -28,13 +28,20 @@ router.include_router(
 
 router.include_router(
     fastapi_users.get_oauth_router(
-        google_oauth_client, authentication_backend, "SECRET", associate_by_email=True
+        google_oauth_client,
+        authentication_backend,
+        settings.access_token.reset_password_token_secret,
+        associate_by_email=True,
     ),
     prefix="/google",
 )
 
 router.include_router(
-    fastapi_users.get_oauth_associate_router(google_oauth_client, UserRead, "SECRET"),
+    fastapi_users.get_oauth_associate_router(
+        google_oauth_client,
+        UserRead,
+        settings.access_token.reset_password_token_secret,
+    ),
     prefix="/associate/google",
 )
 

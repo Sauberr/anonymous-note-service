@@ -206,7 +206,7 @@ async def test_get_note(client, mock_db, mock_db_dependency):
     )
 
     mock_result = MagicMock()
-    mock_result.scalar_one_or_none.return_value = mock_note
+    mock_result.scalars.return_value.first.return_value = mock_note
     mock_db.execute.return_value = mock_result
 
     with (
@@ -303,6 +303,7 @@ async def test_get_notes_pagination(client, mock_db, mock_db_dependency):
     mock_result = MagicMock()
     mock_result.scalars().all.return_value = mock_notes
     mock_db.execute.return_value = mock_result
+    mock_db.scalar = AsyncMock(return_value=3)
 
     response = client.get(f"{NOTES_LIST_URL}?page=1&per_page=3")
 
@@ -337,7 +338,7 @@ async def test_get_ephemeral_note(client, mock_db, mock_db_dependency):
     )
 
     mock_result = MagicMock()
-    mock_result.scalar_one_or_none.return_value = mock_note
+    mock_result.scalars.return_value.first.return_value = mock_note
     mock_db.execute.return_value = mock_result
 
     with (
@@ -382,18 +383,14 @@ async def test_get_note_not_found(client, mock_db, mock_db_dependency):
 async def test_get_home_page(client, mock_db, mock_db_dependency):
     """Test the home page loads with the correct note count."""
 
-    mock_notes = [Note(id=i, text=f"Note {i}") for i in range(5)]
-
-    mock_result = MagicMock()
-    mock_result.scalars().all.return_value = mock_notes
-    mock_db.execute.return_value = mock_result
+    mock_db.scalar = AsyncMock(return_value=5)
 
     response = client.get(BASE_URL)
 
     assert response.status_code == status.HTTP_200_OK
     assert b"!DOCTYPE html" in response.content
 
-    mock_db.execute.assert_called_once()
+    mock_db.scalar.assert_called_once()
 
 
 @pytest.mark.asyncio

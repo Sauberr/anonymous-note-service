@@ -21,11 +21,7 @@ main_app = create_app(
 
 main_app.mount("/static", StaticFiles(directory="app/static"), name="static")
 
-setup_middleware(
-    main_app,
-)
-
-admin = setup_admin(
+setup_admin(
     main_app,
 )
 
@@ -41,4 +37,3 @@ if __name__ == "__main__":
         port=settings.run.port,
         reload=True,
     )
-    babel.run_cli()

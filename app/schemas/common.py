@@ -2,4 +2,5 @@ from pydantic import BaseModel
 
 
 class MessageErrorSchema(BaseModel):
-    error: str
+    response: str
+    message: str

@@ -1,5 +1,5 @@
+import asyncio
 import os
-import shutil
 from pathlib import Path
 
 import uuid_utils as uuid
@@ -12,14 +12,13 @@ async def download_image(
     if image is None:
         raise ValueError("No image file provided")
 
-    if not os.path.exists(upload_dir):
-        os.makedirs(upload_dir, exist_ok=True)
+    os.makedirs(upload_dir, exist_ok=True)
 
     file_extension = os.path.splitext(image.filename or "")[1]
     image_name = f"{uuid.uuid4().hex}{file_extension}"
     saved_path = os.path.join(upload_dir, image_name)
 
-    with open(saved_path, "wb") as file_object:
-        shutil.copyfileobj(image.file, file_object)
+    contents = await image.read()
+    await asyncio.to_thread(Path(saved_path).write_bytes, contents)
 
     return image_name
