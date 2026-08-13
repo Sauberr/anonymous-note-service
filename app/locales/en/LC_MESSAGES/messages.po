@@ -1,0 +1,291 @@
+# English translations for PROJECT.
+# Copyright (C) 2026 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2026.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2026-08-13 21:10+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: en\n"
+"Language-Team: en <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.17.0\n"
+
+#: app/errors_handlers.py:20
+msgid "Unhandled error"
+msgstr "Unhandled error"
+
+#: app/errors_handlers.py:26
+msgid "Unhandled database error"
+msgstr "Unhandled database error"
+
+#: app/errors_handlers.py:32
+msgid "An unexpected error has occurred"
+msgstr "An unexpected error has occurred"
+
+#: app/notes/router.py:73
+msgid "Ephemeral notes cannot have a lifetime"
+msgstr "Ephemeral notes cannot have a lifetime"
+
+#: app/notes/router.py:145 app/notes/router.py:158
+msgid "Such a note does not exist"
+msgstr "Such a note does not exist"
+
+#: app/templates/auth.html:6 app/templates/index.html:23
+msgid "Account"
+msgstr "Account"
+
+#: app/templates/auth.html:20 app/templates/index.html:20
+msgid "Anonymous Notes"
+msgstr "Anonymous Notes"
+
+#: app/templates/auth.html:31 app/templates/auth.html:47
+#: app/templates/auth.html:62
+msgid "Sign in"
+msgstr "Sign in"
+
+#: app/templates/auth.html:32
+msgid "Sign up"
+msgstr "Sign up"
+
+#: app/templates/auth.html:40 app/templates/auth.html:54
+#: app/templates/auth.html:68
+msgid "Email"
+msgstr "Email"
+
+#: app/templates/auth.html:44 app/templates/auth.html:58
+msgid "Password"
+msgstr "Password"
+
+#: app/templates/auth.html:48
+msgid "Forgot password?"
+msgstr "Forgot password?"
+
+#: app/templates/auth.html:61
+msgid "Create account"
+msgstr "Create account"
+
+#: app/templates/auth.html:62
+msgid "Already have an account?"
+msgstr "Already have an account?"
+
+#: app/templates/auth.html:71
+msgid "Send reset link"
+msgstr "Send reset link"
+
+#: app/templates/auth.html:72
+msgid "Back to sign in"
+msgstr "Back to sign in"
+
+#: app/templates/auth.html:75
+msgid "or"
+msgstr "or"
+
+#: app/templates/auth.html:81
+msgid "Continue with Google"
+msgstr "Continue with Google"
+
+#: app/templates/auth.html:84
+msgid "Back to notes"
+msgstr "Back to notes"
+
+#: app/templates/auth.html:90
+msgid "Signed in successfully."
+msgstr "Signed in successfully."
+
+#: app/templates/auth.html:91
+msgid "Account created. You can sign in now."
+msgstr "Account created. You can sign in now."
+
+#: app/templates/auth.html:92
+msgid "If that email exists, a reset link has been sent."
+msgstr "If that email exists, a reset link has been sent."
+
+#: app/templates/auth.html:93
+msgid "Invalid email or password."
+msgstr "Invalid email or password."
+
+#: app/templates/auth.html:94
+msgid "Registration failed. The email may already be in use."
+msgstr "Registration failed. The email may already be in use."
+
+#: app/templates/auth.html:95
+msgid "Please fill in all fields."
+msgstr "Please fill in all fields."
+
+#: app/templates/auth.html:96
+msgid "Could not start Google sign-in."
+msgstr "Could not start Google sign-in."
+
+#: app/templates/hash_storage.html:6
+msgid "Result"
+msgstr "Result"
+
+#: app/templates/hash_storage.html:18
+msgid "Note created"
+msgstr "Note created"
+
+#: app/templates/hash_storage.html:19
+msgid "Share this ID together with your secret phrase. Keep both safe."
+msgstr "Share this ID together with your secret phrase. Keep both safe."
+
+#: app/templates/hash_storage.html:23
+msgid "ID note:"
+msgstr "ID note:"
+
+#: app/templates/hash_storage.html:26
+msgid "Copy"
+msgstr "Copy"
+
+#: app/templates/hash_storage.html:30
+msgid "Copied!"
+msgstr "Copied!"
+
+#: app/templates/hash_storage.html:34 app/templates/note_page.html:31
+msgid "Return"
+msgstr "Return"
+
+#: app/templates/index.html:6 app/templates/index.html:35
+msgid "Notes"
+msgstr "Notes"
+
+#: app/templates/index.html:36
+msgid ""
+"Create a note protected by a secret phrase. Share the ID and phrase with "
+"the recipient."
+msgstr ""
+"Create a note protected by a secret phrase. Share the ID and phrase with "
+"the recipient."
+
+#: app/templates/index.html:37
+msgid "Notes created"
+msgstr "Notes created"
+
+#: app/templates/index.html:42
+msgid "Create a note"
+msgstr "Create a note"
+
+#: app/templates/index.html:43
+msgid ""
+"Enter the text of the note, a secret phrase and select a picture to "
+"upload (optional)"
+msgstr ""
+"Enter the text of the note, a secret phrase and select a picture to "
+"upload (optional)"
+
+#: app/templates/index.html:47 app/templates/index.html:106
+msgid "Secret phrase"
+msgstr "Secret phrase"
+
+#: app/templates/index.html:48 app/templates/index.html:107
+msgid "Enter secret phrase"
+msgstr "Enter secret phrase"
+
+#: app/templates/index.html:51
+msgid "Note text"
+msgstr "Note text"
+
+#: app/templates/index.html:52
+msgid "Enter the text of the note"
+msgstr "Enter the text of the note"
+
+#: app/templates/index.html:56
+msgid "Image"
+msgstr "Image"
+
+#: app/templates/index.html:58
+msgid "Choose file"
+msgstr "Choose file"
+
+#: app/templates/index.html:59 app/templates/index.html:119
+msgid "Select a picture (optional)"
+msgstr "Select a picture (optional)"
+
+#: app/templates/index.html:64
+msgid "Lifetime note"
+msgstr "Lifetime note"
+
+#: app/templates/index.html:67
+msgid "Hours"
+msgstr "Hours"
+
+#: app/templates/index.html:71
+msgid "Minutes"
+msgstr "Minutes"
+
+#: app/templates/index.html:75
+msgid "Seconds"
+msgstr "Seconds"
+
+#: app/templates/index.html:85
+msgid "Ephemeral letter"
+msgstr "Ephemeral letter"
+
+#: app/templates/index.html:85
+msgid "Deleted right after it is read once"
+msgstr "Deleted right after it is read once"
+
+#: app/templates/index.html:90
+msgid "Send"
+msgstr "Send"
+
+#: app/templates/index.html:97
+msgid "Receive a note"
+msgstr "Receive a note"
+
+#: app/templates/index.html:98
+msgid "Enter the note ID and secret phrase"
+msgstr "Enter the note ID and secret phrase"
+
+#: app/templates/index.html:102
+msgid "Note ID"
+msgstr "Note ID"
+
+#: app/templates/index.html:103
+msgid "Enter note ID"
+msgstr "Enter note ID"
+
+#: app/templates/index.html:111
+msgid "Receive"
+msgstr "Receive"
+
+#: app/templates/index.html:120
+msgid "You cannot set a lifetime for an ephemeral message"
+msgstr "You cannot set a lifetime for an ephemeral message"
+
+#: app/templates/index.html:121
+msgid "Error creating note"
+msgstr "Error creating note"
+
+#: app/templates/index.html:122
+msgid "An error occurred"
+msgstr "An error occurred"
+
+#: app/templates/index.html:123
+msgid "An error occurred while processing your request."
+msgstr "An error occurred while processing your request."
+
+#: app/templates/note_page.html:6
+msgid "Note Content"
+msgstr "Note Content"
+
+#: app/templates/note_page.html:18
+msgid "Note content:"
+msgstr "Note content:"
+
+#: app/templates/note_page.html:19
+msgid "Only visible to those with the ID and secret phrase."
+msgstr "Only visible to those with the ID and secret phrase."
+
+#: app/templates/note_page.html:25
+msgid "Note image"
+msgstr "Note image"
+
