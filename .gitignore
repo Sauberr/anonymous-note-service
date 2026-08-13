@@ -7,6 +7,11 @@ __pycache__/
 *.png
 *.webp
 *.gif
+
+# keep README / demo screenshots (override *.png rule above)
+!demonstration/screenshots/
+!demonstration/screenshots/**
+
 # C extensions
 *.so
 .idea/
@@ -131,3 +136,6 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# macOS
+.DS_Store
