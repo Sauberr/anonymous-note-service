@@ -67,19 +67,16 @@ The service features full **OAuth2 social authentication** (Google), **JWT-based
   <img src="demonstration/screenshots/home.png" alt="Home page — English" width="400">
   <img src="demonstration/screenshots/home-ru.png" alt="Home page — Russian" width="400">
 </p>
-<p align="center"><i>Clean, minimal interface — full English / Russian localization (i18n).</i></p>
 
 <p align="center">
   <img src="demonstration/screenshots/note-created.png" alt="Note created — shareable ID" width="400">
   <img src="demonstration/screenshots/note-content.png" alt="Revealed note content" width="400">
 </p>
-<p align="center"><i>Note created (copyable ID) and the revealed note content.</i></p>
 
 <p align="center">
   <img src="demonstration/screenshots/auth-login.png" alt="Sign in page" width="400">
   <img src="demonstration/screenshots/auth-register.png" alt="Sign up page" width="400">
 </p>
-<p align="center"><i>Account page (<code>/api/v1/account/</code>) — sign in, sign up, reset password and Google sign-in.</i></p>
 
 ---
 
