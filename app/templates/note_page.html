@@ -1,47 +1,38 @@
 <!DOCTYPE html>
 <html lang="{{ locale }}">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{{ _("Note Content") }}</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-  <link rel="icon" type="image/x-icon" href="{{ url_for('static', path='images/icon.png') }}"/>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ _("Note Content") }}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', path='css/style.css') }}">
 </head>
-<body class="grey lighten-4">
-  <div class="container mt-5">
-    <div class="row">
-      <div class="col s12 m8 offset-m2">
-        <div class="card">
-          <div class="card-content">
-            <span class="card-title">{{ _("Note content:") }}</span>
-            <p id="noteText">{{ note_text }}</p>
-            {% if note_image %}
-              <div class="note-image">
-                <img src="{{ url_for('static', path='images/' + note_image) }}"
-                     alt="{{ _('Note image') }}" style="max-width:100%; height:auto;">
-              </div>
-            {% endif %}
-          </div>
+<body>
+<main class="container">
+    <section class="card center-card">
+        <div class="status-icon view">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
         </div>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col s12 m8 offset-m2">
-        <button class="btn waves-effect waves-light" onclick="returnToRoot()">{{ _("Return") }}</button>
-      </div>
-    </div>
-  </div>
+        <h2>{{ _("Note content:") }}</h2>
+        <p class="hint">{{ _("Only visible to those with the ID and secret phrase.") }}</p>
 
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      M.AutoInit();
-    });
+        <div class="note-content" id="noteText">{{ note_text }}</div>
 
-    function returnToRoot() {
-      document.location.href = '/api/v1/notes/';
-    }
-  </script>
+        {% if note_image %}
+            <div class="note-image">
+                <img src="{{ url_for('static', path='images/' + note_image) }}" alt="{{ _('Note image') }}">
+            </div>
+        {% endif %}
+
+        <button class="btn btn-primary mt" onclick="returnToRoot()">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+            {{ _("Return") }}
+        </button>
+    </section>
+</main>
+
+<script src="{{ url_for('static', path='js/pages.js') }}"></script>
 </body>
 </html>

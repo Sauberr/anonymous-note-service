@@ -4,195 +4,125 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ _("Notes") }}</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link rel="icon" type="image/x-icon" href="{{ url_for('static', path='images/icon.png') }}"/>
-    <style>
-        .language-selector {
-            position: absolute;
-            top: 10px;
-            right: 20px;
-        }
-        .language-btn {
-            margin-left: 5px;
-        }
-    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', path='css/style.css') }}">
 </head>
-<body class="grey lighten-4">
-<div class="language-selector">
-    <a class="btn-small blue language-btn" href="#" onclick="setLanguage('en')">EN</a>
-    <a class="btn-small red language-btn" href="#" onclick="setLanguage('ru')">RU</a>
-</div>
+<body>
+<header class="topbar">
+    <div class="brand">
+        <span class="mark">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+            </svg>
+        </span>
+        {{ _("Anonymous Notes") }}
+    </div>
+    <div class="topbar-right">
+        <a class="icon-btn" href="/api/v1/account/" title="{{ _('Account') }}" aria-label="{{ _('Account') }}">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        </a>
+        <nav class="lang">
+            <a href="#" onclick="setLanguage('en')" class="{{ 'active' if locale == 'en' else '' }}">EN</a>
+            <a href="#" onclick="setLanguage('ru')" class="{{ 'active' if locale == 'ru' else '' }}">RU</a>
+        </nav>
+    </div>
+</header>
 
-<div class="container mt-5">
-    <h3 class="center-align">{{ _("Notes") }}: {{ notes_count }}</h3>
-    <div class="row">
-        <div class="col s12 m8 offset-m2">
-            <div class="card">
-                <div class="card-content">
-            <span class="card-title">
-                {{ _("Enter the text of the note, a secret phrase and select a picture to upload (optional)") }}
-            </span>
-                    <form id="noteForm" method="post" enctype="multipart/form-data">
-                        <div class="input-field">
-                            <input type="text" id="secretPhrase" name="secret">
-                            <label for="secretPhrase">{{ _("Enter secret phrase") }}</label>
-                        </div>
-                        <div class="input-field">
-                            <textarea class="materialize-textarea" id="noteText" name="text" rows="4"></textarea>
-                            <label for="noteText">{{ _("Enter the text of the note") }}</label>
-                        </div>
-                        <div class="file-field input-field">
-                            <div class="waves-effect waves-light btn-small">
-                                <span>{{ _("File") }}</span>
-                                <input type="file" id="noteImage" name="image">
-                            </div>
-                            <div class="file-path-wrapper">
-                                <input class="file-path validate" type="text"
-                                       placeholder="{{ _('Select a picture (optional)') }}">
-                            </div>
-                        </div>
-                        <span class="card-title">{{ _("Lifetime note") }}</span>
-                        <div class="row">
-                            <div class="input-field col s4">
-                                <input type="number" id="lifetimeHours" name="lifetime_hours" min="0" value="0">
-                                <label for="lifetimeHours">{{ _("Hours") }}</label>
-                            </div>
-                            <div class="input-field col s4">
-                                <input type="number" id="lifetimeMinutes" name="lifetime_minutes" min="0" max="59"
-                                       value="0">
-                                <label for="lifetimeMinutes">{{ _("Minutes") }}</label>
-                            </div>
-                            <div class="input-field col s4">
-                                <input type="number" id="lifetimeSeconds" name="lifetime_seconds" min="0" max="59"
-                                       value="0">
-                                <label for="lifetimeSeconds">{{ _("Seconds") }}</label>
-                            </div>
-                        </div>
-                        <p>
-                            <label>
-                                <input type="checkbox" id="ephemeral" name="is_ephemeral"/>
-                                <span>{{ _("Ephemeral letter") }}</span>
-                            </label>
-                        </p>
-                        <div class="card-action">
-                            <button class="btn waves-effect waves-light" type="submit">{{ _("Send") }}</button>
-                        </div>
-                    </form>
+<main class="container">
+    <div class="page-head">
+        <h1>{{ _("Notes") }}</h1>
+        <p>{{ _("Create a note protected by a secret phrase. Share the ID and phrase with the recipient.") }}</p>
+        <span class="count">{{ _("Notes created") }}: <b>{{ notes_count }}</b></span>
+    </div>
+
+    <!-- Create -->
+    <section class="card">
+        <h2>{{ _("Create a note") }}</h2>
+        <p class="hint">{{ _("Enter the text of the note, a secret phrase and select a picture to upload (optional)") }}</p>
+
+        <form id="noteForm" method="post" enctype="multipart/form-data">
+            <div class="field">
+                <label for="secretPhrase">{{ _("Secret phrase") }}</label>
+                <input type="text" id="secretPhrase" name="secret" placeholder="{{ _('Enter secret phrase') }}">
+            </div>
+            <div class="field">
+                <label for="noteText">{{ _("Note text") }}</label>
+                <textarea id="noteText" name="text" rows="4" placeholder="{{ _('Enter the text of the note') }}"></textarea>
+            </div>
+
+            <div class="field">
+                <label>{{ _("Image") }}</label>
+                <label class="file-row" for="noteImage">
+                    <span class="file-btn">{{ _("Choose file") }}</span>
+                    <span class="file-name" id="fileName">{{ _("Select a picture (optional)") }}</span>
+                    <input type="file" id="noteImage" name="image" accept="image/*">
+                </label>
+            </div>
+
+            <div class="divider">{{ _("Lifetime note") }}</div>
+            <div class="row3">
+                <div class="field">
+                    <label for="lifetimeHours">{{ _("Hours") }}</label>
+                    <input type="number" id="lifetimeHours" name="lifetime_hours" min="0" value="0">
+                </div>
+                <div class="field">
+                    <label for="lifetimeMinutes">{{ _("Minutes") }}</label>
+                    <input type="number" id="lifetimeMinutes" name="lifetime_minutes" min="0" max="59" value="0">
+                </div>
+                <div class="field">
+                    <label for="lifetimeSeconds">{{ _("Seconds") }}</label>
+                    <input type="number" id="lifetimeSeconds" name="lifetime_seconds" min="0" max="59" value="0">
                 </div>
             </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col s12 m8 offset-m2">
-            <div class="card">
-                <div class="card-content">
-                    <span class="card-title">{{ _("Enter the note ID and secret phrase") }}</span>
-                    <form id="getNoteForm">
-                        <div class="input-field">
-                            <input type="text" id="noteId" name="note_id">
-                            <label for="noteId">{{ _("Enter note ID") }}</label>
-                        </div>
-                        <div class="input-field">
-                            <input type="text" id="getSecretPhrase" name="note_secret">
-                            <label for="getSecretPhrase">{{ _("Enter secret phrase") }}</label>
-                        </div>
-                        <div class="card-action">
-                            <button class="btn waves-effect waves-light" type="submit">{{ _("Receive") }}</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+            <label class="check-row">
+                <input type="checkbox" id="ephemeral" name="is_ephemeral">
+                <span class="box">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                </span>
+                <span class="box-label">{{ _("Ephemeral letter") }}<small>{{ _("Deleted right after it is read once") }}</small></span>
+            </label>
+
+            <button class="btn btn-primary mt" type="submit">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                {{ _("Send") }}
+            </button>
+        </form>
+    </section>
+
+    <!-- Receive -->
+    <section class="card">
+        <h2>{{ _("Receive a note") }}</h2>
+        <p class="hint">{{ _("Enter the note ID and secret phrase") }}</p>
+
+        <form id="getNoteForm">
+            <div class="field">
+                <label for="noteId">{{ _("Note ID") }}</label>
+                <input type="text" id="noteId" name="note_id" placeholder="{{ _('Enter note ID') }}">
+            </div>
+            <div class="field">
+                <label for="getSecretPhrase">{{ _("Secret phrase") }}</label>
+                <input type="text" id="getSecretPhrase" name="note_secret" placeholder="{{ _('Enter secret phrase') }}">
+            </div>
+            <button class="btn btn-secondary" type="submit">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4v6h6"/><path d="M20 20v-6h-6"/><path d="M4 10a8 8 0 0 1 14-3M20 14a8 8 0 0 1-14 3"/></svg>
+                {{ _("Receive") }}
+            </button>
+        </form>
+    </section>
+</main>
+
 <script>
-    function setLanguage(lang) {
-        document.cookie = `locale=${lang};path=/;max-age=31536000`;
-        window.location.reload();
-    }
-
-    document.addEventListener('DOMContentLoaded', function () {
-        M.AutoInit();
-    });
-
-    document.getElementById('noteForm').addEventListener('submit', function (event) {
-        event.preventDefault();
-        const form = document.getElementById('noteForm');
-        const formData = new FormData(form);
-
-        const hours = parseInt(document.getElementById('lifetimeHours').value) || 0;
-        const minutes = parseInt(document.getElementById('lifetimeMinutes').value) || 0;
-        const seconds = parseInt(document.getElementById('lifetimeSeconds').value) || 0;
-        const secondsInHour = 3600;
-        const secondsInMinute = 60;
-        const totalSeconds = hours * secondsInHour + minutes * secondsInMinute + seconds;
-
-        if (document.getElementById('ephemeral').checked && totalSeconds > 0) {
-            alert("{{ _('You cannot set a lifetime for an ephemeral message') }}");
-            return;
-        }
-
-        fetch('/api/v1/notes/create_note', {
-            method: 'POST',
-            body: formData
-        })
-            .then(response => {
-                if (!response.ok) {
-                    return response.json().then(data => {
-                        throw new Error(data.detail || 'Error creating note');
-                    });
-                }
-                return response.json();
-            })
-            .then(data => {
-                if (data.response === "ok") {
-                    document.location.href = "/api/v1/notes/result/" + data.note_id;
-                } else if (data.error) {
-                    alert(data.error);
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert(error.message);
-            });
-
-        form.reset();
-    });
-
-    document.getElementById('getNoteForm').addEventListener('submit', function (event) {
-        event.preventDefault();
-        const noteId = document.getElementById('noteId').value;
-        const getSecretPhrase = document.getElementById('getSecretPhrase').value;
-        const formData = new FormData();
-        formData.append("note_id", noteId);
-        formData.append("note_secret", getSecretPhrase);
-
-        fetch('/api/v1/notes/get_note', {
-            method: 'POST',
-            body: formData
-        })
-            .then(response => response.json())
-            .then(data => {
-                console.log("Received response:", data);
-                if (data.response === "ok") {
-                    let redirectUrl = "/api/v1/notes/note_page/" + encodeURIComponent(data.note_final_text);
-                    if (data.note_image) {
-                        redirectUrl += "?note_image=" + encodeURIComponent(data.note_image);
-                    }
-                    window.location.href = redirectUrl;
-                } else {
-                    alert(data.note_final_text || "An error occurred");
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert("An error occurred while processing your request.");
-            });
-    });
+    window.APP_I18N = {
+        selectPicture: "{{ _('Select a picture (optional)') }}",
+        ephemeralLifetime: "{{ _('You cannot set a lifetime for an ephemeral message') }}",
+        createError: "{{ _('Error creating note') }}",
+        genericError: "{{ _('An error occurred') }}",
+        requestError: "{{ _('An error occurred while processing your request.') }}"
+    };
 </script>
+<script src="{{ url_for('static', path='js/main.js') }}"></script>
 </body>
 </html>

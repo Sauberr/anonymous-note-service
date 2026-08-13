@@ -6,6 +6,7 @@ from app.authentication.router import router as auth_router
 from app.authentication.service import router as service_router
 from app.core.config import settings
 from app.notes.router import router as note_router
+from app.pages.router import router as pages_router
 from app.users.router import router as user_router
 from app.webhooks.user import router as webhook_router
 
@@ -17,6 +18,9 @@ router = APIRouter(
 
 router.include_router(
     note_router,
+)
+router.include_router(
+    pages_router,
 )
 router.include_router(
     user_router,

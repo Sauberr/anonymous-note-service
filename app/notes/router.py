@@ -38,7 +38,12 @@ async def get_home_page(
 ):
     notes_count = await db.scalar(select(func.count()).select_from(Note))
     return templates.TemplateResponse(
-        request, "index.html", {"notes_count": notes_count or 0}
+        request,
+        "index.html",
+        {
+            "notes_count": notes_count or 0,
+            "locale": request.cookies.get("locale", "en"),
+        },
     )
 
 
@@ -111,7 +116,9 @@ async def create_note(
 )
 async def get_result_id(request: Request, note_id: str):
     return templates.TemplateResponse(
-        request, "hash_storage.html", {"note_id": note_id}
+        request,
+        "hash_storage.html",
+        {"note_id": note_id, "locale": request.cookies.get("locale", "en")},
     )
 
 
@@ -166,7 +173,11 @@ async def get_result_note(request: Request, note_text: str, note_image: str = ""
     return templates.TemplateResponse(
         request,
         "note_page.html",
-        {"note_text": note_text, "note_image": note_image},
+        {
+            "note_text": note_text,
+            "note_image": note_image,
+            "locale": request.cookies.get("locale", "en"),
+        },
     )
 
 
